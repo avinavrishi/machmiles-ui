@@ -1,24 +1,12 @@
-import React, { useState, useCallback } from "react";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import { Controller, useForm } from "react-hook-form";
-import { usePost } from "../hooks/usePost";
-import { useGet } from "../hooks/useGet";
-import { debounce } from "lodash";
+import * as React from "react";
 import {
   Box,
   Button,
-  CircularProgress,
   FormControl,
   FormControlLabel,
   Grid,
-  InputLabel,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   TextField,
   Typography,
   List,
@@ -67,107 +55,8 @@ const SearchBox = () => {
   const navigate = useNavigate();
   
 
-
-  const normalizeOptions = (data) => {
-    return (
-      Array.isArray(data)
-        ? data
-          .filter((item) => Array.isArray(item.airports) && item.airports.length > 0) // Filter items with airport objects
-          .map((item) => {
-            const airportCodes = item.airports.map((airport) => airport.code).join(", ");
-            return `(${airportCodes}) ${item.name}, ${item.country.code}`;
-          })
-        : []
-    );
-  };
-
-  // Debounce function
-  const debounce = (func, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  // Function to fetch airport suggestions
-  const fetchAirportSuggestions = async (query, setResults) => {
-    const results = await getAirportSuggestions(query);
-    setResults(results);
-  };
-
-  // Debounced API call handlers
-  const debouncedFetchFromResults = debounce((query) => fetchAirportSuggestions(query, setFromResults), 800);
-  const debouncedFetchToResults = debounce((query) => fetchAirportSuggestions(query, setToResults), 800);
-
-  // Handle input change
-  const handleFromChange = (e) => {
-    const query = e.target.value;
-    // console.log("Query Typed:", query);
-    setFrom(query);
-    setShowFromDropdown(true);
-    debouncedFetchFromResults(query);
-  };
-
-  const handleToChange = (e) => {
-    const query = e.target.value;
-    setTo(query);
-    setShowToDropdown(true);
-    debouncedFetchToResults(query);
-  };
-
-  // Handle selection from dropdown
-  const handleFromSelect = (selectedAirport) => {
-    setFrom(selectedAirport.name);  // Display airport name
-    setFromCode(selectedAirport.code); // Store airport code
-    setShowFromDropdown(false);
-  };
-
-  const handleToSelect = (selectedAirport) => {
-    setTo(selectedAirport.name);  // Display airport name
-    setToCode(selectedAirport.code); // Store airport code
-    setShowToDropdown(false);
-  };
-
-  //For Passenger Modal
-  const openPassengerModal = () => setPassengerModalOpen(true);
-  const closePassengerModal = () => setPassengerModalOpen(false);
-
-  const handleApplyPassengers = (newPassengers) => {
-    setPassengers(newPassengers);
-    closePassengerModal();
-  };
-
-  //For Final Search Flight functions:
-  const handleSearch = async () => {
-    if (!fromCode || !toCode) {
-      console.error("Please select valid airport codes for both origin and destination.");
-      return;
-    }
-
-    const payload = {
-      origin: fromCode,
-      destination: toCode,
-      departureDate: departureDate.format("YYYY-MM-DD"),
-      sort: "price",
-      page: 1,
-      limit: 20,
-      adults: passengers.adult,
-      children: passengers.children,
-      infants: passengers.infant,
-      cabinType: "Economy",
-      language: "en-us",
-      currency: "USD",
-    };
-
-    // console.log("Sending search request with payload:", payload);
-
-    try {
-      const response = await searchFlights(payload);
-      navigate("/flights", { state: { searchResults: response, payload:payload } });
-    } catch (error) {
-      console.error("Search request failed:", error);
-    }
+  const handleChange = (e) => {
+    setValue(e.target.value);
   };
 
   // Debounce function
