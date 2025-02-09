@@ -137,8 +137,9 @@
 .searchBox-result-container{
   border:1px solid white;
   border-radius: 14px;
-  background-color: #ffff;
+  background-color: gainsboro;
   width:93%;
   height: auto;
-  padding:3rem
+  padding:3rem;
+  box-shadow:#0e367eff;
 }
