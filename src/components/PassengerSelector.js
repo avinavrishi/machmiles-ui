@@ -6,52 +6,51 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  IconButton,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 
 const PassengerSelector = ({ open, onClose, onApply, initialPassengers }) => {
   // Local state for passengers
   const [passengers, setPassengers] = useState({ ...initialPassengers });
 
-  const handlePassengerChange = (type, change) => {
+  const handleSelect = (type, value) => {
     setPassengers((prev) => ({
       ...prev,
-      [type]: Math.min(
-        { adult: 8, children: 6, infant: 2 }[type],
-        Math.max(0, prev[type] + change)
-      ),
+      [type]: value,
     }));
   };
 
+  const renderSelectionBoxes = (type, range) => (
+    <Grid container spacing={1} justifyContent="center">
+      {range.map((num) => (
+        <Grid item key={num}>
+          <Button
+            variant={passengers[type] === num ? "contained" : "outlined"}
+            onClick={() => handleSelect(type, num)}
+          >
+            {num}
+          </Button>
+        </Grid>
+      ))}
+    </Grid>
+  );
+
   return (
-    <Dialog fullWidth open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth='md' open={open} onClose={onClose} sx={{padding:'1rem'}}>
       <DialogTitle>Select Passengers</DialogTitle>
       <DialogContent>
-        {[
-          { label: "Adults", type: "adult", min: 1, max: 8 },
-          { label: "Children", type: "children", min: 0, max: 6 },
-          { label: "Infants", type: "infant", min: 0, max: 2 },
-        ].map(({ label, type, min, max }) => (
-          <Grid container key={type} spacing={2} alignItems="center" sx={{ marginBottom: 2 }}>
-            <Grid item xs={6}>
-              <Typography>{label}</Typography>
-            </Grid>
-            <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <IconButton onClick={() => handlePassengerChange(type, -1)} disabled={passengers[type] === min}>
-                <RemoveIcon />
-              </IconButton>
-              <Typography sx={{ marginX: 2 }}>{passengers[type]}</Typography>
-              <IconButton onClick={() => handlePassengerChange(type, 1)} disabled={passengers[type] === max}>
-                <AddIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
+        {[ 
+          { label: "Adults", type: "adult", range: Array.from({ length: 10 }, (_, i) => i) },
+          { label: "Children", type: "children", range: Array.from({ length: 7 }, (_, i) => i) },
+          { label: "Infants", type: "infant", range: Array.from({ length: 5 }, (_, i) => i) },
+        ].map(({ label, type, range }) => (
+          <div key={type} style={{ marginBottom: 16 }}>
+            <Typography sx={{textAlign:'center', fontWeight:600}} gutterBottom>{label}</Typography>
+            {renderSelectionBoxes(type, range)}
+          </div>
         ))}
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{padding:'2rem'}}>
         <Button onClick={onClose}>Cancel</Button>
         <Button onClick={() => onApply(passengers)} variant="contained">
           Apply

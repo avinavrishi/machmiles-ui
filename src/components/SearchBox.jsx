@@ -12,7 +12,9 @@ import {
   List,
   ListItem,
   InputAdornment,
-  IconButton
+  IconButton,
+  Select,
+  MenuItem
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
@@ -30,6 +32,7 @@ const SearchBox = () => {
   const [value, setValue] = useState("single");
   const [departureDate, setDepartureDate] = useState(dayjs());
   const [returnDate, setReturnDate] = useState(dayjs());
+  const [cabinClass, setCabinClass] = useState("Economy");
   const options = ["Regular", "Student", "Armed Forces", "Senior Citizen"];
 
   const [fromCode, setFromCode] = useState(""); // Store airport code
@@ -53,7 +56,7 @@ const SearchBox = () => {
   const [showToDropdown, setShowToDropdown] = useState(false);
 
   const navigate = useNavigate();
-  
+
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -75,8 +78,8 @@ const SearchBox = () => {
   };
 
   // Debounced API call handlers
-  const debouncedFetchFromResults = debounce((query) => fetchAirportSuggestions(query, setFromResults), 800);
-  const debouncedFetchToResults = debounce((query) => fetchAirportSuggestions(query, setToResults), 800);
+  const debouncedFetchFromResults = debounce((query) => fetchAirportSuggestions(query, setFromResults), 1500);
+  const debouncedFetchToResults = debounce((query) => fetchAirportSuggestions(query, setToResults), 1500);
 
   // Handle input change
   const handleFromChange = (e) => {
@@ -142,7 +145,7 @@ const SearchBox = () => {
 
     try {
       const response = await searchFlights(payload);
-      navigate("/flights", { state: { searchResults: response, payload:payload } });
+      navigate("/flights", { state: { searchResults: response, payload: payload } });
     } catch (error) {
       console.error("Search request failed:", error);
     }
@@ -235,7 +238,13 @@ const SearchBox = () => {
         </Grid>
 
         <Grid item lg={2} md={2} sm={12} xs={12} display="flex" justifyContent="center" alignItems="center">
-          <SwapHorizIcon sx={{ cursor: "pointer" }} />
+          <SwapHorizIcon sx={{ cursor: "pointer" }} 
+          onClick={() => {
+            setFrom(to);
+            setTo(from);
+            setFromCode(toCode);
+            setToCode(fromCode);
+          }}  />
         </Grid>
 
         <Grid item lg={5} md={5} sm={12} xs={12} position="relative">
@@ -338,7 +347,18 @@ const SearchBox = () => {
           initialPassengers={passengers}
         />
         <Grid item lg={3} md={3} sm={6} xs={12}>
-          <TextField fullWidth label="Class" />
+          <FormControl fullWidth>
+            <Select
+              value={cabinClass}
+              onChange={(e) => setCabinClass(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value="Economy">Economy</MenuItem>
+              <MenuItem value="Premium Economy">Premium Economy</MenuItem>
+              <MenuItem value="Business">Business</MenuItem>
+              <MenuItem value="First">First Class</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
 
         {/* Special Fare Options */}
