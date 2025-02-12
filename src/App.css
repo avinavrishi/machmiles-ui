@@ -3,6 +3,8 @@
   min-height: 100vh;
   width: auto;
   position: relative;
+  font-family: "Poppins";
+  font-size: 0.81rem;
 }
 .content{
   padding-top: 5vh;
@@ -12,15 +14,18 @@
   height: 3vw;
   padding: 10px 7px;
   position: fixed;
-  z-index: 9999;
+  z-index: 1000;
   width: 100%;
   justify-content: space-between;
   display: flex;
-  transition: top 0.3s; /* Add transition for smooth effect */
+  transition: top 0.3s; /* Add transition for smooth effect */;
 }
 .navbar-logo{
-  margin-top:-4vh;
+  /* margin-top:-4vh; */
   /* width: 10%; */
+  display: flex;
+  align-items: center;
+
 }
 .navbar-links{
   display: flex;
@@ -32,6 +37,11 @@
   font-size: 1vw;
   font:light;
   text-transform: capitalize;
+  display: flex;
+  align-items: center;
+}
+.linkstyle:hover{
+  border-bottom:2px solid #2a3d90 ;
 }
 /* Landing Page CSS */
 .landing {
@@ -62,6 +72,7 @@
   background-color: white;
   border-radius: 30px;
   padding: 2vw;
+  font-family: "Poppins";
 }
 #title-style{
   font-size: 3.5rem;
@@ -138,8 +149,11 @@
   border:1px solid white;
   border-radius: 14px;
   background-color: gainsboro;
-  width:93%;
+  width:auto;
   height: auto;
-  padding:3rem;
+  padding:2rem;
+  display: flex;
   box-shadow:#0e367eff;
+  font-family: "Poppins";
+  position: sticky;
 }

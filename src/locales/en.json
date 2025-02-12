@@ -1,0 +1,31 @@
+{
+    "welcome": "Find your Perfect Flight with Ease",
+    "welcome2": "Discover Affordable Flights and Unforgettable Journeys",
+    "myTrips": "My Trips",
+    "services": "Services",
+    "login": "Login/Sign up",
+    "contact": "+1 (321) 414 3818",
+
+    "oneway":"One way",
+    "return":"Round Trip",
+    "origin":"Origin",
+    "destination":"Destination",
+    "depatureDate":"Departure Date",
+    "returnDate":"Return Date",
+    "economy":"Economy",
+    "premiumEco":"Premium Economy",
+    "business":"Business Class",
+    "first":"First Class",
+    "searchFlight":"Search Flights",
+
+    "why":"why",
+    "ourServices":"Our Services",
+    "liveSupport":"Live Support",
+    "freeCan":"Free Cancellation",
+    "Offer":"Offers on 100+ Airlines",
+    "ser1":"Stuck with a last-minute change or need help booking? Our expert support team is available round the clock to ensure a smooth journey—no bots, just real humans ready to assist!",
+    "ser2":"Plans can change in a blink! We’ve got your back with hassle-free cancellations, so you can book with confidence—zero stress, zero extra cost.",
+    "ser3":"Why pay more when you can score insane discounts? Get exclusive access to the best fares across the world's top airlines, making dream trips a reality at unbeatable prices!",
+
+    "exp_title":"Explore our Holiday Packages today."
+}

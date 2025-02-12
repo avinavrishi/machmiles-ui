@@ -3,9 +3,13 @@ import axios from "axios";
 const BASE_URL = `http://34.134.214.156:8000`
 
 const axiosServices = {
-    get: async (endpoint, params = {}, headers = {}) => {
+    get: async (endpoint, params = {}, data = {}, headers = {}) => {
         try {
-            const response = await axios.get(`${BASE_URL}${endpoint}`, { params, headers });
+            const response = await axios.get(`${BASE_URL}${endpoint}`, {
+                params,  // Query parameters
+                data,    // Payload (rarely used in GET, but some servers may accept)
+                headers,
+            });
             return response.data;
         }
         catch (error) {

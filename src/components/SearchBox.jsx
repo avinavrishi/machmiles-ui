@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-  Box,
+  // Box,
   Button,
   FormControl,
   FormControlLabel,
@@ -12,7 +12,9 @@ import {
   List,
   ListItem,
   InputAdornment,
-  IconButton
+  IconButton,
+  Select,
+  MenuItem
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
@@ -25,12 +27,23 @@ import PassengerSelector from './PassengerSelector'
 import { getAirportSuggestions, searchFlights } from '../utils/apiService';
 
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import i18n from "../i18n";
 
 const SearchBox = () => {
+  const selectedLanguage = useSelector((state) => state.language.selectedLanguage);
+  const {t} = useTranslation();
+
+  React.useEffect(() => {
+    i18n.changeLanguage(selectedLanguage); // Update language when Redux store changes
+  }, [selectedLanguage]);
+  
   const [value, setValue] = useState("single");
   const [departureDate, setDepartureDate] = useState(dayjs());
   const [returnDate, setReturnDate] = useState(dayjs());
-  const options = ["Regular", "Student", "Armed Forces", "Senior Citizen"];
+  const [cabinClass, setCabinClass] = useState(t("economy"));
+  // const options = ["Regular", "Student", "Armed Forces", "Senior Citizen"];
 
   const [fromCode, setFromCode] = useState(""); // Store airport code
   const [toCode, setToCode] = useState("");     // Store airport code
@@ -53,7 +66,7 @@ const SearchBox = () => {
   const [showToDropdown, setShowToDropdown] = useState(false);
 
   const navigate = useNavigate();
-  
+
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -75,8 +88,8 @@ const SearchBox = () => {
   };
 
   // Debounced API call handlers
-  const debouncedFetchFromResults = debounce((query) => fetchAirportSuggestions(query, setFromResults), 800);
-  const debouncedFetchToResults = debounce((query) => fetchAirportSuggestions(query, setToResults), 800);
+  const debouncedFetchFromResults = debounce((query) => fetchAirportSuggestions(query, setFromResults), 1500);
+  const debouncedFetchToResults = debounce((query) => fetchAirportSuggestions(query, setToResults), 1500);
 
   // Handle input change
   const handleFromChange = (e) => {
@@ -142,7 +155,7 @@ const SearchBox = () => {
 
     try {
       const response = await searchFlights(payload);
-      navigate("/flights", { state: { searchResults: response, payload:payload } });
+      navigate("/flights", { state: { searchResults: response, payload: payload } });
     } catch (error) {
       console.error("Search request failed:", error);
     }
@@ -155,8 +168,8 @@ const SearchBox = () => {
         <Grid item lg={12} md={12} sm={12} xs={12} sx={{ display: "flex", justifyContent: "center" }}>
           <FormControl>
             <RadioGroup row value={value} onChange={handleChange}>
-              <FormControlLabel value="single" control={<Radio />} label="One way" />
-              <FormControlLabel value="return" control={<Radio />} label="Round Trip" />
+              <FormControlLabel value="single" control={<Radio />} label={t("oneway")} />
+              <FormControlLabel value="return" control={<Radio />} label={t("return")} />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -165,7 +178,7 @@ const SearchBox = () => {
         <Grid item lg={5} md={5} sm={12} xs={12} position="relative">
           <TextField
             fullWidth
-            label="From"
+            label={t("origin")}
             value={from}
             onChange={handleFromChange}
             InputProps={{
@@ -235,13 +248,19 @@ const SearchBox = () => {
         </Grid>
 
         <Grid item lg={2} md={2} sm={12} xs={12} display="flex" justifyContent="center" alignItems="center">
-          <SwapHorizIcon sx={{ cursor: "pointer" }} />
+          <SwapHorizIcon sx={{ cursor: "pointer" }} 
+          onClick={() => {
+            setFrom(to);
+            setTo(from);
+            setFromCode(toCode);
+            setToCode(fromCode);
+          }}  />
         </Grid>
 
         <Grid item lg={5} md={5} sm={12} xs={12} position="relative">
           <TextField
             fullWidth
-            label="To"
+            label={t("destination")}
             value={to}
             onChange={handleToChange}
             InputProps={{
@@ -311,10 +330,10 @@ const SearchBox = () => {
         {/* Date Pickers */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Grid item lg={3} md={3} sm={6} xs={12}>
-            <DatePicker label="Departure Date" value={departureDate} onChange={setDepartureDate} minDate={dayjs()} />
+            <DatePicker label={t("depatureDate")} value={departureDate} onChange={setDepartureDate} minDate={dayjs()} />
           </Grid>
           <Grid item lg={3} md={3} sm={6} xs={12}>
-            <DatePicker label="Return Date" value={returnDate} disabled={value !== "return"} onChange={setReturnDate} minDate={dayjs()} />
+            <DatePicker label={t("returnDate")} value={returnDate} disabled={value !== "return"} onChange={setReturnDate} minDate={dayjs()} />
           </Grid>
         </LocalizationProvider>
 
@@ -338,21 +357,32 @@ const SearchBox = () => {
           initialPassengers={passengers}
         />
         <Grid item lg={3} md={3} sm={6} xs={12}>
-          <TextField fullWidth label="Class" />
+          <FormControl fullWidth>
+            <Select
+              value={cabinClass}
+              onChange={(e) => setCabinClass(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value="Economy">{t("economy")}</MenuItem>
+              <MenuItem value="Premium Economy">{t("premiumEco")}</MenuItem>
+              <MenuItem value="Business">{t("business")}</MenuItem>
+              <MenuItem value="First">{t("first")}</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
 
         {/* Special Fare Options */}
-        <Grid item lg={2} md={2} sm={12} xs={12}>
+        {/* <Grid item lg={2} md={2} sm={12} xs={12}>
           <Box sx={{ textAlign: "center", paddingTop: "5%" }}>
             <Typography fontWeight="bold">Select a special fare</Typography>
           </Box>
-        </Grid>
+        </Grid> */}
 
 
         {/* Search Button */}
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }} mt={2}>
           <Button sx={{ background: "#3f8fd6ff", color: "white", minWidth: "11vw", "&:hover": { background: "#3f8fd6ff" } }} onClick={handleSearch}>
-            Search Flights
+          {t("searchFlight")}
           </Button>
         </Grid>
       </Grid>
