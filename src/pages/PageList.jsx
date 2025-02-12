@@ -4,8 +4,14 @@ import { useLocation } from 'react-router-dom';
 
 function PageList() {
   const location = useLocation();
+
   const searchResults = location.state?.searchResults || [];
   const finalPayload = location.state?.payload || [];
+
+  const handleBookNow = (flight) => {
+    localStorage.setItem("selectedFlight", JSON.stringify(flight)); // Store flight in localStorage
+    window.open("/flights/review", "_blank"); // Open new tab
+  };
 
 
 //   const tempResult = [
@@ -745,12 +751,14 @@ function PageList() {
 //   "language": "en-us",
 //   "currency": "USD"
 // }
-  // console.log("The searchResults ",searchResults)
+//   console.log("The searchResults ",searchResults)
+
   return (
     <div className='page-result'>
         <SearchTop
           data={searchResults} 
           payload={finalPayload} 
+          onBookNow={handleBookNow}
           // data={tempResult}
           // payload={tempPayload}
         />

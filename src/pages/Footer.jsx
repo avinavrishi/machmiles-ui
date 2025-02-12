@@ -11,7 +11,7 @@ const Footer = () => {
                 </Grid>
                 {
                     ['privacy policy','Taxes & Faxes', 'Terms','Post Ticketing Fees','Contact us','faq','about company','travel blog'].map((item, index)=>(
-                        <Grid key={index} item xs={12} sx={{textTransform:'capitalize'}}><a href="" target="blank" style={{color:'white', textDecoration:'none'}}>{item}</a></Grid>
+                        <Grid key={index} item xs={12} sx={{textTransform:'capitalize'}}><a href="www.machmiles.com" target="blank" style={{color:'white', textDecoration:'none'}}>{item}</a></Grid>
                     ))
                 }
             </Grid>
@@ -23,7 +23,7 @@ const Footer = () => {
                 </Grid>
                 {
                     ['Airlines Flash Sales','Cheap Airfares to South america', 'carribean','middle east','south pacific','Asia','central America'].map((item, index)=>(
-                        <Grid key={index} item xs={12} sx={{textTransform:'capitalize'}}><a href="" target="blank" style={{color:'white', textDecoration:'none'}}>{item}</a></Grid>
+                        <Grid key={index} item xs={12} sx={{textTransform:'capitalize'}}><a href="www.machmiles.com" target="blank" style={{color:'white', textDecoration:'none'}}>{item}</a></Grid>
                     ))
                 }
             </Grid>
@@ -35,7 +35,7 @@ const Footer = () => {
                 </Grid>
                 {
                     ['New York, NY 10012, US','info@example.com', '+ 01 234 567 88',' + 01 234 567 89'].map((item, index)=>(
-                        <Grid key={index} item xs={12} sx={{textTransform:'capitalize'}}><a href="" target="blank" style={{color:'white', textDecoration:'none'}}>{item}</a></Grid>
+                        <Grid key={index} item xs={12} sx={{textTransform:'capitalize'}}><a href="www.machmiles.com" target="blank" style={{color:'white', textDecoration:'none'}}>{item}</a></Grid>
                     ))
                 }
             </Grid>
