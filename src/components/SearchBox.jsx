@@ -14,7 +14,8 @@ import {
   InputAdornment,
   IconButton,
   Select,
-  MenuItem
+  MenuItem,
+  CircularProgress
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
@@ -25,37 +26,42 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import PassengerSelector from './PassengerSelector'
 import { getAirportSuggestions, searchFlights } from '../utils/apiService';
-
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import i18n from "../i18n";
+import { setPassengerDetails } from "../store/passengerDetailsSlice";
 
-const SearchBox = () => {
+const SearchBox = ({prevData}) => {
   const selectedLanguage = useSelector((state) => state.language.selectedLanguage);
   const {t} = useTranslation();
-
+  const dispatch = useDispatch()
   React.useEffect(() => {
     i18n.changeLanguage(selectedLanguage); // Update language when Redux store changes
   }, [selectedLanguage]);
   
-  const [value, setValue] = useState("single");
-  const [departureDate, setDepartureDate] = useState(dayjs());
-  const [returnDate, setReturnDate] = useState(dayjs());
-  const [cabinClass, setCabinClass] = useState(t("economy"));
+  const [value, setValue] = useState(prevData?.tripType || "single");
+  const [departureDate, setDepartureDate] = useState(prevData?.departureDate ? dayjs(prevData.departureDate) : dayjs());
+  const [returnDate, setReturnDate] = useState(prevData?.returnDate ? dayjs(prevData.returnDate) : dayjs());
+  const [cabinClass, setCabinClass] = useState(prevData?.cabinClass || t("economy"));
   // const options = ["Regular", "Student", "Armed Forces", "Senior Citizen"];
-
-  const [fromCode, setFromCode] = useState(""); // Store airport code
-  const [toCode, setToCode] = useState("");     // Store airport code
+  const [loading, setLoading] = useState(false);
+  const [from, setFrom] = useState(prevData?.origin || "");
+  const [fromCode, setFromCode] = useState(prevData?.origin || "");
+  const [to, setTo] = useState(prevData?.destination || "");
+  const [toCode, setToCode] = useState(prevData?.destination || "");
 
   //State for Passenger Input
   const [passengerModalOpen, setPassengerModalOpen] = useState(false);
-  const [passengers, setPassengers] = useState({ adult: 1, children: 0, infant: 0 });
+  const [passengers, setPassengers] = useState({
+    adult: prevData?.adults || 1,
+    children: prevData?.children || 0,
+    infant: prevData?.infants || 0
+  });
 
 
   // State for input fields
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
+  
 
   // State for API search results
   const [fromResults, setFromResults] = useState([]);
@@ -152,12 +158,15 @@ const SearchBox = () => {
     };
 
     // console.log("Sending search request with payload:", payload);
-
+    dispatch(setPassengerDetails(payload));
+    setLoading(true); // Start loading
     try {
       const response = await searchFlights(payload);
       navigate("/flights", { state: { searchResults: response, payload: payload } });
     } catch (error) {
       console.error("Search request failed:", error);
+    }finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -330,10 +339,10 @@ const SearchBox = () => {
         {/* Date Pickers */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Grid item lg={3} md={3} sm={6} xs={12}>
-            <DatePicker label={t("depatureDate")} value={departureDate} onChange={setDepartureDate} minDate={dayjs()} />
+            <DatePicker sx={{width:'100%'}} label={t("depatureDate")} value={departureDate} onChange={setDepartureDate} minDate={dayjs()} />
           </Grid>
           <Grid item lg={3} md={3} sm={6} xs={12}>
-            <DatePicker label={t("returnDate")} value={returnDate} disabled={value !== "return"} onChange={setReturnDate} minDate={dayjs()} />
+            <DatePicker sx={{width:'100%'}} label={t("returnDate")} value={returnDate} disabled={value !== "return"} onChange={setReturnDate} minDate={dayjs()} />
           </Grid>
         </LocalizationProvider>
 
@@ -342,7 +351,7 @@ const SearchBox = () => {
           <Button sx={{
             color: 'black',
             borderColor: 'gainsboro',
-            padding: '0.9rem'
+            padding: prevData?.adults ? '-1rem': '0.9rem'
           }} fullWidth variant="outlined" onClick={openPassengerModal}>
             {passengers.adult} Adult{passengers.adult > 1 ? "s" : ""},
             {passengers.children} Child{passengers.children !== 1 ? "ren" : ""},
@@ -381,8 +390,8 @@ const SearchBox = () => {
 
         {/* Search Button */}
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }} mt={2}>
-          <Button sx={{ background: "#3f8fd6ff", color: "white", minWidth: "11vw", "&:hover": { background: "#3f8fd6ff" } }} onClick={handleSearch}>
-          {t("searchFlight")}
+          <Button sx={{ background: "#3f8fd6ff", color: "white", minWidth: "11vw", "&:hover": { background: "#3f8fd6ff" } }} onClick={handleSearch} disabled={loading}>
+          {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : t("searchFlight")}
           </Button>
         </Grid>
       </Grid>

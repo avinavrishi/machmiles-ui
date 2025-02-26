@@ -64,20 +64,20 @@ const Headers = () => {
   return (
     <div className='navbar' style={{ top: visible ? '0' : '-4.5vw' }}>
       <Link to='/' className='navbar-logo'>
-        <img src={Logo} alt='Machmiles' onClick={'/'} />
+        <img src={Logo} alt='Machmiles' onClick={'/'} className='responsive-logo' />
       </Link>
       <div className='navbar-links'>
         {['myTrips', 'services', 'login', 'contact'].map((link, index) => (
           <a
             key={index}
             href="https://google.com"
-            style={{ marginLeft: index === 0 ? '12vw' : '1vw', textDecoration: 'none', fontWeight: 600, color: 'white' }}
+          style={{ marginLeft: index === 0 ? '12vw' : '1vw', textDecoration: 'none', fontWeight: 600, color: 'white' }}
             className='linkstyle'
           >
             {t(link)}
           </a>
         ))}
-        <LanguageIcon style={{ marginLeft: '1vw', color: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', marginTop: '0.5vh' }} onClick={handleMenuOpen} />
+        <LanguageIcon className="language-icon"  onClick={handleMenuOpen} />
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
