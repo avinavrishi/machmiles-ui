@@ -3,8 +3,10 @@ import apiService from './axiosServices'
 const API_ENDPOINTS = {
   GET_LANGUAGE:"/rest/v1/flight/get-language/",
   GET_CURRENCY:"/rest/v1/flight/get-currency/",
+  REGISTER_USER:"/rest/v1/auth/signup/",
+  USER_LOGIN:"/rest/v1/auth/login/",
   FLIGHT_SEARCH_ONE_WAY: "/rest/v1/flight/search-one-way-flight",
-  FLIGHT_SEARCH_RETURN: "/rest/v1/flight/search-one-way-flight",
+  FLIGHT_SEARCH_RETURN: "/rest/v1/flight/search-two-way-flight",
   AIRPORT_SUGGESTIONS: "/rest/v1/flight/auto-complete-search/",
   GET_FLIGHT_DETAILS:"/rest/v1/flight/get-flight-details",
 }
@@ -32,6 +34,28 @@ export const getCurrency = async()=>{
     throw error;
   }
 };
+
+//Register User:
+export const registerUser = async(payload) =>{
+  try{
+    const response = await apiService.post(API_ENDPOINTS.REGISTER_USER, payload);
+    return response;
+  }catch(error){
+    console.error("Failed to register user. Please try again later.", error)
+    throw error;
+  }
+}
+
+//Login::
+export const userLogin = async(payload) =>{
+  try{
+    const response = await apiService.post(API_ENDPOINTS.USER_LOGIN,payload);
+    return response;
+  }catch(error){
+    console.error("Error in login", error);
+    throw(error);
+  }
+}
 
 
 // Fetch airport suggestions
@@ -81,6 +105,17 @@ export const searchFlights = async (payload) => {
     throw error;
   }
 };
+
+//Return Flight Search 
+export const searchReturnFlight = async(payload) =>{
+  try{
+    const response = await apiService.post(API_ENDPOINTS.FLIGHT_SEARCH_RETURN,payload);
+    return response;
+  }catch(error){
+    console.error("Error in searching return flight", error);
+    throw error
+  }
+}
 
 //Get Flight Details:
 export const getFlightDetails = async (payload) => {
