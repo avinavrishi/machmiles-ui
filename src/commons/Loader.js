@@ -1,11 +1,11 @@
-export const Loader = () =>{
+export const Loader = ({height='80vh'}) =>{
     return (
         <div
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "80vh", // Adjust as needed
+              height: height, // Adjust as needed
               width: "100%",
             }}
           >

@@ -162,17 +162,13 @@ const SearchBox = ({prevData}) => {
     }
 
     console.log("Sending search request with payload:", payload);
-    dispatch(setPassengerDetails(payload));
     setLoading(true); // Start loading
-    try {
-      const response = value === 'return' ? await searchReturnFlight(payload) : await searchFlights(payload);
-      navigate("/flights", { state: { searchResults: response, payload: payload } });
-    } catch (error) {
-      console.error("Search request failed:", error);
-    }finally {
-      setLoading(false); // Stop loading
-    }
+    dispatch(setPassengerDetails(payload));
+    navigate("/flights", { state: { tripType: value} });
+    setLoading(false)
   };
+
+
 
   return (
     <div className="search-box">

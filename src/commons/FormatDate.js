@@ -1,5 +1,9 @@
-export const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
+export const formatDate = (dateString) => {
+    if (!dateString) return ""; // Handle null/undefined cases
+
+    const date = new Date(dateString); // Convert ISO string to Date object
+    if (isNaN(date)) return "Invalid Date"; // Handle invalid dates
+
     const day = date.getDate();
     const month = date.toLocaleString('en-US', { month: 'short' });
     const year = date.getFullYear();
@@ -48,4 +52,10 @@ export const convertMinutesToHours = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
+  };
+
+//24Hrs Clock
+export const convertTo24Hr = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString("en-GB", { hour12: false , hour:"2-digit", minute:'2-digit'});
   };

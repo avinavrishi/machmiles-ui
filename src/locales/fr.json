@@ -1,8 +1,14 @@
 {
     "welcome": "Trouvez votre vol parfait en toute simplicité",
     "welcome2": "Découvrez des vols abordables et des voyages inoubliables",
+    "hotel": "Hôtels",
+    "cars": "Voitures",
+    "flight": "Vols",
     "myTrips": "Mes Voyages",
     "services": "Services",
+    "acc": "Mon Compte",
+    "admin": "Administrateur",
+    "settings": "Paramètres",
     "login": "Connexion/Inscription",
     "contact": "+1 (321) 414 3818",
     "oneway": "Aller simple",
@@ -24,6 +30,5 @@
     "ser1": "Un changement de dernière minute ou besoin d'aide pour réserver ? Notre équipe d'assistance est disponible 24/7 pour garantir un voyage sans stress – pas de robots, juste des humains prêts à vous aider !",
     "ser2": "Les plans changent en un clin d'œil ! Profitez de notre politique d'annulation gratuite, sans frais cachés, et réservez en toute sérénité.",
     "ser3": "Pourquoi payer plus cher ? Accédez à des réductions exclusives et réservez vos vols avec les meilleures compagnies aériennes du monde à des prix imbattables !",
-
-    "exp_title":"Découvrez nos forfaits vacances dès aujourd'hui."
+    "exp_title": "Découvrez nos forfaits vacances dès aujourd'hui."
 }

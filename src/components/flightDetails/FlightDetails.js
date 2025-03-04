@@ -1,5 +1,5 @@
-import { Box, Grid } from "@mui/material"
-import { formatDate, formatShortDate } from "../../commons/FormatDate"
+import { Box, Grid, Typography } from "@mui/material"
+import { convertTo24Hr, formatDate, formatShortDate } from "../../commons/FormatDate"
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import CoffeeIcon from '@mui/icons-material/Coffee';
@@ -7,6 +7,7 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import WifiIcon from '@mui/icons-material/Wifi';
 import ChargingStationIcon from '@mui/icons-material/ChargingStation';
+import { Loader } from "../../commons/Loader";
 
 export const FlightDetails = ({ data }) => {
     //Function for Converting durations
@@ -15,6 +16,17 @@ export const FlightDetails = ({ data }) => {
         const mins = minutes % 60;
         return `${hours}h ${mins}m`;
     };
+
+    console.log(data)
+
+    if(!data){
+        return (
+            <div>
+                <Loader height="30vh"/>
+                <Typography mb={2} sx={{fontSize:'1rem', fontWeight:500, fontFamily:'Poppins', textAlign:'center'}}>...Please wait</Typography>
+            </div>
+        )
+    }
     return (
         <>
             <Box sx={{ padding: "0.5rem", borderBottom: '1px solid gainsboro' }} mb={2} display={'flex'}>
@@ -29,7 +41,7 @@ export const FlightDetails = ({ data }) => {
                 </Grid>
                 <Grid item lg={3} md={5.5} sm={12} xs={12}>
                     <Grid container>
-                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'} justifyContent={'center'}>{data?.departure_time.slice(11, 16)}</Grid>
+                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'} justifyContent={'center'}>{convertTo24Hr(data?.departure_time)}</Grid>
                         <Grid item xs={12} fontSize={'0.85rem'} display={'flex'} justifyContent={'center'}>{formatShortDate(data?.departure_time)}</Grid>
                         <Grid item xs={12} fontSize={'0.75rem'} display={'flex'} justifyContent={'center'} textAlign={'center'}>{data?.origin_data?.name}</Grid>
                     </Grid>
@@ -42,7 +54,7 @@ export const FlightDetails = ({ data }) => {
                 </Grid>
                 <Grid item lg={3} md={5.5} sm={12} xs={12}>
                     <Grid container>
-                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'} justifyContent={'center'}>{data?.arrival_time.slice(11, 16)}</Grid>
+                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'} justifyContent={'center'}>{convertTo24Hr(data?.arrival_time)}</Grid>
                         <Grid item xs={12} fontSize={'0.85rem'} display={'flex'} justifyContent={'center'}>{formatShortDate(data?.arrival_time)}</Grid>
                         <Grid item xs={12} fontSize={'0.75rem'} display={'flex'} justifyContent={'center'} textAlign={'center'}>{data?.destination?.name}</Grid>
                     </Grid>

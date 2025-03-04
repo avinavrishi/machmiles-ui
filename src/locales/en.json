@@ -1,11 +1,16 @@
 {
     "welcome": "Find your Perfect Flight with Ease",
     "welcome2": "Discover Affordable Flights and Unforgettable Journeys",
+    "hotel":"Hotels",
+    "cars":"Cars",
+    "flight":"Flights",
     "myTrips": "My Trips",
     "services": "Services",
     "login": "Login/Sign up",
     "contact": "+1 (321) 414 3818",
-
+    "acc":"My Account",
+    "admin":"Admin",
+    "settings":"Settings",
     "oneway":"One way",
     "return":"Round Trip",
     "origin":"Origin",
