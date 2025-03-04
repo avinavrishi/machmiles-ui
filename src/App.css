@@ -12,7 +12,7 @@
 }
 
 .navbar {
-  background-color: black;
+  background-color: #0e367e;
   height: 3vw;
   padding: 10px 7px;
   position: fixed;
@@ -30,6 +30,7 @@
   /* width: 10%; */
   display: flex;
   align-items: center;
+  color:black;
 
 }
 
@@ -65,7 +66,7 @@
 }
 
 .linkstyle:hover {
-  border-bottom: 2px solid #2a3d90;
+  border-bottom: 2px solid white;
 }
 
 /* Landing Page CSS */
@@ -123,6 +124,23 @@
   font-size: 1.3rem;
   font-family: 'Times New Roman', Times, serif;
   color: #ffff;
+}
+
+.submit-button{
+  border:none;
+  padding:1rem;
+  border-radius: 7px;
+  background-color: #0e367e;
+  color: white;
+  min-width: 15vw;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'Poppins';
+  cursor: pointer;
+}
+.submit-button:hover{
+  background-color: #3f8fd6ff;
+  transition: 0.2s ease-in;
 }
 
 /* Services Section*/

@@ -190,14 +190,23 @@ function SearchTop({ data, onBookNow }) {
                         <Grid item xs={12} display={'flex'} justifyContent={'center'}><Typography sx={{ fontFamily: 'Poppins', fontSize: '0.85rem' }}>{formatShortDate(passengerDetails.departureDate)}</Typography></Grid>
                       </Grid>
                     </Grid>
-                    <Grid item lg={3} md={3} sm={6} xs={12} >
+                    {
+                      passengerDetails.returnDate.length > 0 && 
+                    <Grid item lg={2.5} md={3} sm={6} xs={12}>
+                      <Grid container>
+                        <Grid item xs={12} display={'flex'} justifyContent={'center'}><Typography sx={{ fontWeight: 'bold', fontFamily: 'Poppins', fontSize: '0.85rem' }}>Return Date</Typography></Grid>
+                        <Grid item xs={12} display={'flex'} justifyContent={'center'}><Typography sx={{ fontFamily: 'Poppins', fontSize: '0.85rem' }}>{formatShortDate(passengerDetails.returnDate)}</Typography></Grid>
+                      </Grid>
+                    </Grid>
+                    }
+                    <Grid item lg={2} md={3} sm={6} xs={12} >
                       <Grid container>
                         <Grid item xs={12} display={'flex'} justifyContent={'center'}>
                           <Typography sx={{ fontWeight: 'bold', fontFamily: 'Poppins', fontSize: '0.85rem' }}>Passengers</Typography>
                         </Grid>
                         <Grid item xs={12} display={'flex'} justifyContent={'center'}>
                           <Typography sx={{ fontFamily: 'Poppins', fontSize: '0.85rem' }}>
-                            {passengerDetails?.adults} {passengerDetails?.adults > 1 ? "Adults" : "Adult"} {passengerDetails?.children > 0 && `, ${passengerDetails?.children} ${passengerDetails?.children > 1 ? "Childrens" : "Children"}`}{passengerDetails?.infants > 0 && `, ${passengerDetails?.infants} ${passengerDetails?.infants > 1 ? "Infants" : "Infant"}`}
+                          {passengerDetails?.adults > 0 && ` ${passengerDetails?.adults} ${passengerDetails?.adults > 1 ? "Adults" : "Adult"}`} {passengerDetails?.children > 0 && `, ${passengerDetails?.children} ${passengerDetails?.children > 1 ? "Childrens" : "Children"}`}{passengerDetails?.infants > 0 && `, ${passengerDetails?.infants} ${passengerDetails?.infants > 1 ? "Infants" : "Infant"}`}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -208,7 +217,7 @@ function SearchTop({ data, onBookNow }) {
                         <Grid item xs={12} display={'flex'} justifyContent={'center'}><Typography sx={{ fontFamily: 'Poppins', fontSize: '0.85rem' }}>{passengerDetails.cabinType}</Typography></Grid>
                       </Grid>
                     </Grid>
-                    <Grid item lg={1.5} md={12} sm={12} xs={12} display={'flex'} justifyContent={'center'}>
+                    <Grid item lg={passengerDetails.returnDate.length > 0 ? 12 : 2.5} md={12} sm={12} xs={12} display={'flex'} justifyContent={'center'} mt={1}>
                       <Button sx={{ background: "#3f8fd6ff", color: "white", minWidth: "9vw", "&:hover": { background: "#3f8fd6ff" }, fontFamily: 'Poppins', fontSize: '0.85rem' }} onClick={handleModify} >
                         {modifyTab ? "Close" : "Modify Search"}
                       </Button>

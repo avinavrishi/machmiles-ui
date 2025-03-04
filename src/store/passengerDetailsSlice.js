@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    origin: "JFK",
-    destination: "CDG",
-    departureDate: "2025-03-18T00:40:00Z",
+    origin: "DEL",
+    destination: "BOM",
+    departureDate: new Date().toISOString(),
+    returnDate:"",
     sort: "price",
     page: 1,
     limit: 20,

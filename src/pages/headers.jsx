@@ -7,6 +7,8 @@ import { setLanguage } from '../store/LanguageSlice';
 import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
+import ModalComponent from '../commons/Modal';
+import Login from '../components/Login/login';
 
 const Headers = () => {
   const dispatch = useDispatch();
@@ -15,6 +17,38 @@ const Headers = () => {
   const selectedLanguage = useSelector((state) => state.language.selectedLanguage);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navLinks = [
+    { id: "myTrips", label: t("myTrips"), url: "https://google.com" },
+    { id: "services", label: t("services"), url: "https://google.com" },
+    { id: "contact", label: t("contact"), url: "https://google.com" },
+    { id: "login", label: t("login"), url: "https://google.com" }
+  ]
+
+
+  const handleNavClick = (link) => {
+    switch (link) {
+      case "login":
+        console.log("Login Clicked");
+        setIsModalOpen(!isModalOpen)
+        break;
+      case "contact":
+        console.log("Contact Clicked");
+        break;
+      case "myTrips":
+        console.log("My trips Clicked");
+        break;
+      case "services":
+        console.log("Services Clicked");
+        break;
+      default:
+        console.log("Something is wrong")
+    }
+  }
+
+  const handleCloseModal = () =>setIsModalOpen(false)
+
 
   useEffect(() => {
     i18n.changeLanguage(selectedLanguage);
@@ -67,17 +101,23 @@ const Headers = () => {
         <img src={Logo} alt='Machmiles' onClick={'/'} className='responsive-logo' />
       </Link>
       <div className='navbar-links'>
-        {['myTrips', 'services', 'login', 'contact'].map((link, index) => (
-          <a
-            key={index}
-            href="https://google.com"
-          style={{ marginLeft: index === 0 ? '12vw' : '1vw', textDecoration: 'none', fontWeight: 600, color: 'white' }}
-            className='linkstyle'
+        {navLinks.map((link, index) => (
+          <div
+            key={link.id}
+            style={{
+              marginLeft: index === 0 ? "12vw" : "1vw",
+              textDecoration: "none",
+              fontWeight: 600,
+              color: "white",
+              cursor:'pointer'
+            }}
+            className="linkstyle"
+            onClick={() => handleNavClick(link.id)}
           >
-            {t(link)}
-          </a>
+            {link.label}
+          </div>
         ))}
-        <LanguageIcon className="language-icon"  onClick={handleMenuOpen} />
+        <LanguageIcon className="language-icon" onClick={handleMenuOpen} />
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -135,6 +175,13 @@ const Headers = () => {
         </Menu>
 
       </div>
+      <ModalComponent 
+        open={isModalOpen} 
+        handleClose = {handleCloseModal}
+        hideClose={true}
+      >
+        <Login handleClose={handleCloseModal}/>
+      </ModalComponent>
     </div>
   );
 };

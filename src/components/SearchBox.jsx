@@ -25,7 +25,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import PassengerSelector from './PassengerSelector'
-import { getAirportSuggestions, searchFlights } from '../utils/apiService';
+import { getAirportSuggestions, searchFlights, searchReturnFlight } from '../utils/apiService';
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -157,11 +157,15 @@ const SearchBox = ({prevData}) => {
       currency: "USD",
     };
 
-    // console.log("Sending search request with payload:", payload);
+    if(value === 'return'){
+      payload.returnDate = returnDate.format("YYYY-MM-DD");
+    }
+
+    console.log("Sending search request with payload:", payload);
     dispatch(setPassengerDetails(payload));
     setLoading(true); // Start loading
     try {
-      const response = await searchFlights(payload);
+      const response = value === 'return' ? await searchReturnFlight(payload) : await searchFlights(payload);
       navigate("/flights", { state: { searchResults: response, payload: payload } });
     } catch (error) {
       console.error("Search request failed:", error);
@@ -177,8 +181,8 @@ const SearchBox = ({prevData}) => {
         <Grid item lg={12} md={12} sm={12} xs={12} sx={{ display: "flex", justifyContent: "center" }}>
           <FormControl>
             <RadioGroup row value={value} onChange={handleChange}>
-              <FormControlLabel value="single" control={<Radio />} label={t("oneway")} />
-              <FormControlLabel value="return" control={<Radio />} label={t("return")} />
+              <FormControlLabel sx={{color:'black', fontFamily:'Poppins'}} value="single" control={<Radio />} label={t("oneway")} />
+              <FormControlLabel sx={{color:'black', fontFamily:'Poppins'}} value="return" control={<Radio />} label={t("return")} />
             </RadioGroup>
           </FormControl>
         </Grid>
@@ -198,6 +202,10 @@ const SearchBox = ({prevData}) => {
                   </IconButton>
                 </InputAdornment>
               ),
+              style: {
+                fontSize: '0.75rem', // Smaller font size for the label
+              },
+              shrink: true, // Keeps the label always shrunk, even when focused or filled
             }}
           />
           {showFromDropdown && fromResults.length > 0 && (
@@ -280,6 +288,10 @@ const SearchBox = ({prevData}) => {
                   </IconButton>
                 </InputAdornment>
               ),
+              style: {
+                fontSize: '0.75rem', // Smaller font size for the label
+              },
+              shrink: true, // Keeps the label always shrunk, even when focused or filled
             }}
           />
           {showToDropdown && toResults.length > 0 && (
@@ -390,9 +402,26 @@ const SearchBox = ({prevData}) => {
 
         {/* Search Button */}
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }} mt={2}>
-          <Button sx={{ background: "#3f8fd6ff", color: "white", minWidth: "11vw", "&:hover": { background: "#3f8fd6ff" } }} onClick={handleSearch} disabled={loading}>
-          {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : t("searchFlight")}
-          </Button>
+          <button className="submit-button" disabled={loading} onClick={handleSearch}>
+          {
+            loading ? (
+              <Grid container>
+                <Grid item xs={3}>
+                <CircularProgress size={20} sx={{ color: "white" }} />
+                </Grid>
+                <Grid item xs={9} pt={'0rem'} display={'flex'} justifyContent={'center'} alignContent={'flex-end'}>
+                  Searching Flights
+                </Grid>
+              </Grid>
+            ):(
+          <Grid container>
+            <Grid item xs={12}>
+            {t("searchFlight")}
+            </Grid>
+          </Grid>
+            )
+          }
+          </button>
         </Grid>
       </Grid>
     </div>

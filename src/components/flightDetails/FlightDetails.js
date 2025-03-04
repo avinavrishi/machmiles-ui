@@ -29,9 +29,9 @@ export const FlightDetails = ({ data }) => {
                 </Grid>
                 <Grid item lg={3} md={5.5} sm={12} xs={12}>
                     <Grid container>
-                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'}>{data?.departure_time.slice(11, 16)}</Grid>
-                        <Grid item xs={12} fontSize={'0.85rem'} display={'flex'}>{formatShortDate(data?.departure_time)}</Grid>
-                        <Grid item xs={12} fontSize={'0.75rem'} display={'flex'}>{data?.origin_data?.name}</Grid>
+                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'} justifyContent={'center'}>{data?.departure_time.slice(11, 16)}</Grid>
+                        <Grid item xs={12} fontSize={'0.85rem'} display={'flex'} justifyContent={'center'}>{formatShortDate(data?.departure_time)}</Grid>
+                        <Grid item xs={12} fontSize={'0.75rem'} display={'flex'} justifyContent={'center'} textAlign={'center'}>{data?.origin_data?.name}</Grid>
                     </Grid>
                 </Grid>
                 <Grid item lg={1} md={1} sm={12} xs={12} display={'flex'} alignItems={'center'}>
@@ -42,9 +42,9 @@ export const FlightDetails = ({ data }) => {
                 </Grid>
                 <Grid item lg={3} md={5.5} sm={12} xs={12}>
                     <Grid container>
-                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'}>{data?.arrival_time.slice(11, 16)}</Grid>
-                        <Grid item xs={12} fontSize={'0.85rem'} display={'flex'}>{formatShortDate(data?.arrival_time)}</Grid>
-                        <Grid item xs={12} fontSize={'0.75rem'} display={'flex'}>{data?.destination?.name}</Grid>
+                        <Grid item xs={12} fontSize={'1.5rem'} display={'flex'} justifyContent={'center'}>{data?.arrival_time.slice(11, 16)}</Grid>
+                        <Grid item xs={12} fontSize={'0.85rem'} display={'flex'} justifyContent={'center'}>{formatShortDate(data?.arrival_time)}</Grid>
+                        <Grid item xs={12} fontSize={'0.75rem'} display={'flex'} justifyContent={'center'} textAlign={'center'}>{data?.destination?.name}</Grid>
                     </Grid>
                 </Grid>
                 <Grid item lg={1} md={4} sm={4} xs={4}>
