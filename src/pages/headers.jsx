@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Logo from '../assets/icons/logo.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LanguageIcon from '@mui/icons-material/Language';
+import PersonIcon from '@mui/icons-material/Person';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLanguage } from '../store/LanguageSlice';
-import { Menu, MenuItem } from '@mui/material';
+import { Menu, MenuItem, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import ModalComponent from '../commons/Modal';
@@ -12,19 +13,37 @@ import Login from '../components/Login/login';
 
 const Headers = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { t } = useTranslation();
   const languages = useSelector((state) => state.language.languages)
   const selectedLanguage = useSelector((state) => state.language.selectedLanguage);
-
+  const isLoggedIn = useSelector((state) => !!state.user.accessToken)
+  const isAdmin = useSelector((state) => state.user.isAdmin)
   const [anchorEl, setAnchorEl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [personAnchorEl, setPersonAnchorEl] = useState(null);
+
+  // Open Person Menu
+  const handlePersonMenuOpen = (event) => {
+    setPersonAnchorEl(event.currentTarget);
+  };
+
+  const handlePersonMenuClose = () => {
+    setPersonAnchorEl(null);
+  };
+
   const navLinks = [
-    { id: "myTrips", label: t("myTrips"), url: "https://google.com" },
+    { id: "flight", label: t("flight"), url: "https://google.com" },
+    { id: "hotel", label: t("hotel"), url: "https://google.com" },
+    { id: "cars", label: t("cars"), url: "https://google.com" },
     { id: "services", label: t("services"), url: "https://google.com" },
-    { id: "contact", label: t("contact"), url: "https://google.com" },
-    { id: "login", label: t("login"), url: "https://google.com" }
-  ]
+    { id: "contact", label: t("contact"), url: "https://google.com" }
+  ].concat(
+    !isLoggedIn ? [
+      { id: "login", label: t("login"), url: "https://google.com" }
+    ] : []
+  )
 
 
   const handleNavClick = (link) => {
@@ -36,18 +55,45 @@ const Headers = () => {
       case "contact":
         console.log("Contact Clicked");
         break;
-      case "myTrips":
-        console.log("My trips Clicked");
+      case "flight":
+        navigate('/');
         break;
-      case "services":
-        console.log("Services Clicked");
+      case "hotel":
+        console.log("Hotels Clicked");
+        break;
+      case "cars":
+        console.log("Cars Clicked");
         break;
       default:
         console.log("Something is wrong")
     }
   }
 
-  const handleCloseModal = () =>setIsModalOpen(false)
+  const handleCloseModal = () => setIsModalOpen(false)
+
+  const handleMenuItems = (key) => {
+    switch (key) {
+      case 'myTrips':
+        navigate('/myTrips');
+        handlePersonMenuClose();
+        break;
+      case 'account':
+        navigate('/account');
+        handlePersonMenuClose();
+        break;
+      case 'admin':
+        navigate('/admin');
+        handlePersonMenuClose();
+        break;
+      case 'settings':
+        navigate('/settings');
+        handlePersonMenuClose();
+        break;
+      default:
+        navigate('/');
+        break;
+    }
+  }
 
 
   useEffect(() => {
@@ -104,12 +150,13 @@ const Headers = () => {
         {navLinks.map((link, index) => (
           <div
             key={link.id}
+
             style={{
               marginLeft: index === 0 ? "12vw" : "1vw",
               textDecoration: "none",
               fontWeight: 600,
               color: "white",
-              cursor:'pointer'
+              cursor: 'pointer'
             }}
             className="linkstyle"
             onClick={() => handleNavClick(link.id)}
@@ -117,7 +164,15 @@ const Headers = () => {
             {link.label}
           </div>
         ))}
-        <LanguageIcon className="language-icon" onClick={handleMenuOpen} />
+        {
+          isLoggedIn &&
+          <PersonIcon
+            sx={{ margin: '0rem 1rem 0 1rem' }}
+            className="language-icon"
+            onClick={handlePersonMenuOpen}
+          />
+        }
+        <LanguageIcon sx={{ marginTop: '0.05rem' }} className="language-icon" onClick={handleMenuOpen} />
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -131,14 +186,18 @@ const Headers = () => {
               overflowY: 'auto', // Enables scrolling when needed
               zIndex: 1300,
               borderRadius: '10px', // Soft edges
+              maxWidth: '40vw',
+              minWidth: '17vw',
+              marginTop: '1rem',
             },
           }}
         >
           <div style={{
             maxHeight: '40vh',
             overflowY: 'auto',
-            scrollbarWidth: 'thin', // Firefox custom scrollbar
-            scrollbarColor: '#888 #f1f1f1', // Thumb and track color
+            // background: '#0e367e',
+            scrollbarWidth: 'none', // Firefox custom scrollbar
+            // scrollbarColor: '#0e367e #0e367e', // Thumb and track color
           }}>
             <style>
               {`
@@ -148,17 +207,17 @@ const Headers = () => {
         }
 
         div::-webkit-scrollbar-track {
-          background: #f1f1f1; /* Light grey background */
+          background: #0e367e; /* Light grey background */
           border-radius: 10px;
         }
 
         div::-webkit-scrollbar-thumb {
-          background: #888; /* Dark grey thumb */
+          background: #0e367e; /* Dark grey thumb */
           border-radius: 10px; /* Rounded edges */
         }
 
         div::-webkit-scrollbar-thumb:hover {
-          background: #555; /* Darker on hover */
+          background: #ffff; /* Darker on hover */
         }
       `}
             </style>
@@ -167,20 +226,62 @@ const Headers = () => {
                 key={lang.Code}
                 onClick={() => handleLanguageChange(lang.Code)}
                 selected={lang.Code === selectedLanguage}
+                sx={{
+                  padding: '1rem',
+                  width: '100%',
+                  textAlign: 'center',
+                  display: 'flex',
+                  justifyContent: 'center'
+                }}
               >
-                {lang.Translation}
+                <Typography sx={{ fontFamily: 'Poppins', color: 'black', fontWeight: 600, fontSize: '0.85rem' }}>
+                  {lang.Translation}
+                </Typography>
               </MenuItem>
             ))}
           </div>
         </Menu>
 
+        <Menu
+          anchorEl={personAnchorEl}
+          open={Boolean(personAnchorEl)}
+          onClose={handlePersonMenuClose}
+          PaperProps={{
+            style: {
+              maxHeight: '30vh',
+              overflowY: 'auto',
+              zIndex: 1300,
+              borderRadius: '10px',
+              maxWidth: '20vw',
+              minWidth: '15vw',
+              marginTop: '1rem',
+            },
+          }}
+        >
+          <MenuItem onClick={() => handleMenuItems('myTrips')}>
+            <Typography sx={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem' }}>{t("myTrips")}</Typography>
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItems('account')}>
+            <Typography sx={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem' }}>{t("acc")}</Typography>
+          </MenuItem>
+          {
+            isAdmin || isAdmin === 1 && <MenuItem onClick={() => handleMenuItems('admin')}>
+              <Typography sx={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem' }}>{t("admin")}</Typography>
+            </MenuItem>
+          }
+
+          <MenuItem onClick={() => handleMenuItems('settings')}>
+            <Typography sx={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: '0.85rem' }}>{t("settings")}</Typography>
+          </MenuItem>
+        </Menu>
+
       </div>
-      <ModalComponent 
-        open={isModalOpen} 
-        handleClose = {handleCloseModal}
+      <ModalComponent
+        open={isModalOpen}
+        handleClose={handleCloseModal}
         hideClose={true}
       >
-        <Login handleClose={handleCloseModal}/>
+        <Login handleClose={handleCloseModal} />
       </ModalComponent>
     </div>
   );

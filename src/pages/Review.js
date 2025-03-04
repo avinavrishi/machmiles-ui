@@ -7,10 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CreditCardForm from "../components/CreditCardForm";
 import {Loader} from '../commons/Loader'
+import { getFlightDetails } from "../utils/apiService";
 function Review() {
   const [selectedFlight, setSelectedFlight] = useState(null);
   const flightData = useSelector((state) => state.selectedFlight)
   const { adults, children, infants } = useSelector((state) => state.passengerDetails);
+  // const {lang} = useSelector((state)=>)
+  // const {currency} = useSelector((state)=>)
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -20,20 +23,40 @@ function Review() {
     cvv: "",
     cardholderName: "",
   });
+
+  const fetchFlightDetails = async() =>{
+    let payload = {
+      itenary_id: flightData.iterinary_id,
+      token: flightData.token_id,
+      language: "en-us",
+      currency: "USD"
+    }
+   try{
+    const response = await getFlightDetails(payload);
+    console.log("Final Payload of Details", response)
+    setSelectedFlight(response)
+   } catch(error){
+    console.error("err",error)
+   }finally{
+    setIsLoading(false)
+   }
+  }
+
   useEffect(() => {
     setIsLoading(true)
     // const flightData = localStorage.getItem("selectedFlight");
     if (flightData) {
-      setTimeout(()=>{
-        setIsLoading(false)
-      },[2000])
       // setSelectedFlight(JSON.parse(flightData));
-      setSelectedFlight(flightData);
+      // setSelectedFlight(flightData);
+      fetchFlightDetails()
+
     } else {
       navigate('/flights'); // Redirect to /flights if no flight is selected
     }
     // eslint-disable-next-line
   }, []);
+
+  
 
   // ${type === "adult" ? "Adult" : type === "child" ? "Child" : "Infant"}
 

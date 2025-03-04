@@ -19,6 +19,7 @@ function SearchTop({ data, onBookNow }) {
   const [isLoading, setIsLoading] = useState(false)
   const passengerDetails = useSelector((state) => state.passengerDetails)
   const [modifyTab, setModifyTab] = useState(false)
+  const [flightDetail, setFlightDetail] = useState(null)
   const tabs = [
     { id: "flightDetails", label: "Flight Details" },
     { id: "fareSummary", label: "Fare Summary" },
@@ -29,9 +30,9 @@ function SearchTop({ data, onBookNow }) {
   const renderTabContent = () => {
     switch (selectedTab) {
       case "flightDetails":
-        return (<FlightDetails data={tempResponse} />);
+        return (<FlightDetails data={flightDetail} />);
       case "fareSummary":
-        return (<FareSummary data={tempResponse} />);
+        return (<FareSummary data={flightDetail} />);
       case "cancellation":
         return (<CancelFlight />);
       case "dateChange":
@@ -76,13 +77,12 @@ function SearchTop({ data, onBookNow }) {
         language: "en-us",
         currency: "USD"
       }
-      console.log("The payload to be sent:::", payload)
-
-
+      // console.log("The payload to be sent:::", payload)
 
       try {
         const response = await getFlightDetails(payload);
-        console.log("Response for the Flight Details:", response)
+        // console.log("Response for the Flight Details:", response)
+        setFlightDetail(response)
       }
       catch (error) {
         console.error(error);
@@ -91,76 +91,73 @@ function SearchTop({ data, onBookNow }) {
 
   };
 
-  const tempResponse = {
-    "itinerary_id": "A:BOM_20250216_A:DEL_1-0-0_ECO_2__346180584",
-    "token": "AAAA.AAAADK4CAq7A/SzUuFDKH9yxlLDAbUVquwW6AlHjRtYDdgSC0XYMh+ecbusxSAVCAE9Vx5Prpk67SVKHkc0cgWeV6aZmm+hlO8u6sg9UJt02QNUsf0MbmYNW5mbUQbMjabZJLlA7GBTWZVvDh76NKeimMm05rrAKfROyOKsgeaJ5wdA/poJkgn7FIv8tSMCB/zfWFVOX3s6J7ouxpbcVqsJyeyuGIszstHE+zeJjwzrUIGA4M39pnzHVB/ByEigx7Zf1DpHDh0KsVjsAsS1oBngvsdK4JzOA3Vyo5uzz4IFOmoAC9y7Zk+yRy67CrwtShRo9jeMnBls2rp6h7KwwNRG54gCaYEJ3RoFROr4Ebd3JcpljysDIP2o2WsbWjsXRrrn35Qs91dRizsgzShmXJYqHMB3LY2JSU+Ul3D9oQ8B5ZPq7XH3g6u1OD34bEdZWWdKkafkAbifx+vJJHIQE1poqF7gBX9vUiF6WqTrrBeutfp5dtyASDuI9euBKjCzVxQ==",
-    "lap_infant_allowed": false,
-    "password_required": false,
-    "carrier_image": "https://img.agoda.net/images/mvc/default/airlines/AI_V3.png",
-    "carrier_name": "Air India",
-    "flight_number": "2986",
-    "departure_time": "2025-02-16T22:50:00",
-    "origin_data": {
-      "code": "BOM",
-      "name": "Chhatrapati Shivaji Maharaj International Airport",
-      "cityInfo": {
-        "id": 16850,
-        "name": "Mumbai"
-      },
-      "country": {
-        "countryIso2": null,
-        "coordinates": null,
-        "countryCallingCode": null,
-        "id": 35,
-        "name": "India",
-        "code": null
-      }
-    },
-    "arrival_time": "2025-02-17T01:00:00",
-    "destination": {
-      "code": "DEL",
-      "name": "Indira Gandhi International Airport",
-      "cityInfo": {
-        "id": 14552,
-        "name": "New Delhi and NCR"
-      },
-      "country": {
-        "countryIso2": null,
-        "coordinates": null,
-        "countryCallingCode": null,
-        "id": 35,
-        "name": "India",
-        "code": null
-      }
-    },
-    "trip_duration": 130,
-    "cabin_class": 4,
-    "cabin_name": "Economy Class",
-    "baggage_fee": 0.0,
-    "aircraft_data": {
-      "code": "32N",
-      "name": "Airbus A320",
-      "features": null
-    },
-    "base_fare": 63.45,
-    "total_tax": 10.42,
-    "total_fare": 73.71,
-    "total_fare_per_passenger": 73.87,
-    "total_tax_per_passenger": 10.42,
-    "total_discount": 0.16,
-    "total_inclusive_per_passenger": 73.71
-  }
+  // const tempResponse = {
+  //   "itinerary_id": "A:BOM_20250216_A:DEL_1-0-0_ECO_2__346180584",
+  //   "token": "AAAA.AAAADK4CAq7A/SzUuFDKH9yxlLDAbUVquwW6AlHjRtYDdgSC0XYMh+ecbusxSAVCAE9Vx5Prpk67SVKHkc0cgWeV6aZmm+hlO8u6sg9UJt02QNUsf0MbmYNW5mbUQbMjabZJLlA7GBTWZVvDh76NKeimMm05rrAKfROyOKsgeaJ5wdA/poJkgn7FIv8tSMCB/zfWFVOX3s6J7ouxpbcVqsJyeyuGIszstHE+zeJjwzrUIGA4M39pnzHVB/ByEigx7Zf1DpHDh0KsVjsAsS1oBngvsdK4JzOA3Vyo5uzz4IFOmoAC9y7Zk+yRy67CrwtShRo9jeMnBls2rp6h7KwwNRG54gCaYEJ3RoFROr4Ebd3JcpljysDIP2o2WsbWjsXRrrn35Qs91dRizsgzShmXJYqHMB3LY2JSU+Ul3D9oQ8B5ZPq7XH3g6u1OD34bEdZWWdKkafkAbifx+vJJHIQE1poqF7gBX9vUiF6WqTrrBeutfp5dtyASDuI9euBKjCzVxQ==",
+  //   "lap_infant_allowed": false,
+  //   "password_required": false,
+  //   "carrier_image": "https://img.agoda.net/images/mvc/default/airlines/AI_V3.png",
+  //   "carrier_name": "Air India",
+  //   "flight_number": "2986",
+  //   "departure_time": "2025-02-16T22:50:00",
+  //   "origin_data": {
+  //     "code": "BOM",
+  //     "name": "Chhatrapati Shivaji Maharaj International Airport",
+  //     "cityInfo": {
+  //       "id": 16850,
+  //       "name": "Mumbai"
+  //     },
+  //     "country": {
+  //       "countryIso2": null,
+  //       "coordinates": null,
+  //       "countryCallingCode": null,
+  //       "id": 35,
+  //       "name": "India",
+  //       "code": null
+  //     }
+  //   },
+  //   "arrival_time": "2025-02-17T01:00:00",
+  //   "destination": {
+  //     "code": "DEL",
+  //     "name": "Indira Gandhi International Airport",
+  //     "cityInfo": {
+  //       "id": 14552,
+  //       "name": "New Delhi and NCR"
+  //     },
+  //     "country": {
+  //       "countryIso2": null,
+  //       "coordinates": null,
+  //       "countryCallingCode": null,
+  //       "id": 35,
+  //       "name": "India",
+  //       "code": null
+  //     }
+  //   },
+  //   "trip_duration": 130,
+  //   "cabin_class": 4,
+  //   "cabin_name": "Economy Class",
+  //   "baggage_fee": 0.0,
+  //   "aircraft_data": {
+  //     "code": "32N",
+  //     "name": "Airbus A320",
+  //     "features": null
+  //   },
+  //   "base_fare": 63.45,
+  //   "total_tax": 10.42,
+  //   "total_fare": 73.71,
+  //   "total_fare_per_passenger": 73.87,
+  //   "total_tax_per_passenger": 10.42,
+  //   "total_discount": 0.16,
+  //   "total_inclusive_per_passenger": 73.71
+  // }
 
   const handleModify = () => {
     setModifyTab(!modifyTab)
   }
 
-  useEffect(() => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-    }, [3000])
-  }, [])
+  if(data.length === 0){
+    return <Loader/>
+  }
 
   return (
 

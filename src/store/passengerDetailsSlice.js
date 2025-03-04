@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    origin: "DEL",
-    destination: "BOM",
+    origin: "",
+    destination: "",
     departureDate: new Date().toISOString(),
     returnDate:"",
     sort: "price",

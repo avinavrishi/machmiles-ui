@@ -12,7 +12,8 @@
 }
 
 .navbar {
-  background-color: #0e367e;
+  background-color: #0a2556;
+  /* background-color: black; */
   height: 3vw;
   padding: 10px 7px;
   position: fixed;
@@ -283,6 +284,7 @@
   --s: -1, -1;
 }
 
+
 @keyframes l5-0 {
   0% {
     transform: scale(1, 1) rotate(0deg)
@@ -311,6 +313,26 @@
   50% {
     background: #514b82
   }
+}
+
+.layout{
+  display: flex;
+  justify-content: center;
+  /* padding: 1rem; */
+}
+.profile-box{
+  background-image: linear-gradient(56deg, #9ad74d, #5cb472 48%, #309c8b );
+  height: 80%;
+  width: 55%;
+  border-radius: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-family: 'Poppins';
+  font-weight: 700;
+  color: white;
+
 }
 
 @media screen and (min-width: 1025px) {
