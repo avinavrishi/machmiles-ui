@@ -13,8 +13,8 @@ const ModalComponent = ({ open, handleClose, hideClose, title, children }) => {
                     width: 'auto',
                     height: 'auto',
                     bgcolor: "#0e367e",
-                      boxShadow: 20,
-                    p: 4,
+                      boxShadow: 24,
+                    p: 1,
                     borderRadius: 5,
                     // overflow:'scroll'
                 }}

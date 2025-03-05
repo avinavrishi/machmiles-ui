@@ -19,16 +19,16 @@ const userSlice = createSlice({
       state.username = action.payload.username;
       state.accessToken = action.payload.access_token;
       state.refreshToken = action.payload.refresh_token;
-      state.isAdmin = action.payload.is_admin;
-      state.isStaff = action.payload.is_staff;
+      state.isAdmin = action.payload.is_admin === 1 ? true: false;
+      state.isStaff = action.payload.is_staff === 1 ? true: false;
       state.expiresAt = expiresAt;
 
       // Store in localStorage
       localStorage.setItem("username", action.payload.username);
       localStorage.setItem("accessToken", action.payload.access_token);
       localStorage.setItem("refreshToken", action.payload.refresh_token);
-      localStorage.setItem("isAdmin", action.payload.is_admin);
-      localStorage.setItem("isStaff", action.payload.is_staff);
+      localStorage.setItem("isAdmin", action.payload.is_admin === 1 ? true: false);
+      localStorage.setItem("isStaff", action.payload.is_staff === 1 ? true: false);
       localStorage.setItem("expiresAt", expiresAt);
     },
     logout: (state) => {

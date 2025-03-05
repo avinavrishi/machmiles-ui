@@ -2,7 +2,7 @@ import './App.css';
 import Headers from './pages/headers';
 import Base from './pages/Base'
 import PageList from './pages/PageList';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchLanguage } from './store/LanguageSlice';
@@ -12,31 +12,28 @@ import { Account } from './pages/Account';
 import { Admin } from './pages/Admin';
 import Settings from './pages/Settings';
 import AuthCheck from './AuthCheck';
+
 function App() {
   const dispatch = useDispatch()
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchLanguage())
-  },[dispatch])
+  }, [dispatch])
 
-  
   return (
-    
-      <div className='App'>
-        <Router>
-          <AuthCheck/>
-          <Headers />
-          <Routes>
-            <Route path='/' exact Component={Base} />
-            <Route path='/flights' exact Component={PageList} />
-            <Route path="/flights/review" exact Component={Review} />
-            <Route path="/myTrips" exact Component={MyTrips} />
-            <Route path="/account" exact Component={Account} />
-            <Route path="/admin" exact Component={Admin} />
-            <Route path="/settings" exact Component={Settings} />
-          </Routes>
-        </Router>
-      </div>
+    <div className='App'>
+      <AuthCheck />
+      <Headers />
+      <Routes>
+        <Route path='/' element={<Base />} />
+        <Route path='/flights' element={<PageList />} />
+        <Route path="/flights/review" element={<Review />} />
+        <Route path="/myTrips" element={<MyTrips />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </div>
   );
 }
 

@@ -199,9 +199,30 @@ const SearchBox = ({prevData}) => {
                 </InputAdornment>
               ),
               style: {
-                fontSize: '0.75rem', // Smaller font size for the label
+                fontSize: '0.75rem',
+                backgroundColor: '#fff',
+                color: '#000',
               },
-              shrink: true, // Keeps the label always shrunk, even when focused or filled
+              sx: {
+                '& .MuiInputLabel-root': {
+                  color: 'var(--accent-color)',
+                  '&.Mui-focused': {
+                    color: 'var(--accent-color)',
+                  }
+                },
+                '& .MuiOutlinedInput-input': {
+                  color: '#000',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                }
+              }
             }}
           />
           {showFromDropdown && fromResults.length > 0 && (
@@ -285,9 +306,30 @@ const SearchBox = ({prevData}) => {
                 </InputAdornment>
               ),
               style: {
-                fontSize: '0.75rem', // Smaller font size for the label
+                fontSize: '0.75rem',
+                backgroundColor: '#fff',
+                color: '#000',
               },
-              shrink: true, // Keeps the label always shrunk, even when focused or filled
+              sx: {
+                '& .MuiInputLabel-root': {
+                  color: 'var(--accent-color)',
+                  '&.Mui-focused': {
+                    color: 'var(--accent-color)',
+                  }
+                },
+                '& .MuiOutlinedInput-input': {
+                  color: '#000',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                }
+              }
             }}
           />
           {showToDropdown && toResults.length > 0 && (
@@ -347,10 +389,51 @@ const SearchBox = ({prevData}) => {
         {/* Date Pickers */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Grid item lg={3} md={3} sm={6} xs={12}>
-            <DatePicker sx={{width:'100%'}} label={t("depatureDate")} value={departureDate} onChange={setDepartureDate} minDate={dayjs()} />
+            <DatePicker 
+              sx={{
+                width: '100%',
+                '& .MuiInputBase-root': {
+                  backgroundColor: '#fff',
+                  '& input': {
+                    color: '#000',
+                  }
+                },
+                '& .MuiInputLabel-root': {
+                  color: 'var(--accent-color)',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                }
+              }} 
+              label={t("depatureDate")} 
+              value={departureDate} 
+              onChange={setDepartureDate} 
+              minDate={dayjs()} 
+            />
           </Grid>
           <Grid item lg={3} md={3} sm={6} xs={12}>
-            <DatePicker sx={{width:'100%'}} label={t("returnDate")} value={returnDate} disabled={value !== "return"} onChange={setReturnDate} minDate={dayjs()} />
+            <DatePicker 
+              sx={{
+                width: '100%',
+                '& .MuiInputBase-root': {
+                  backgroundColor: '#fff',
+                  '& input': {
+                    color: '#000',
+                  }
+                },
+                '& .MuiInputLabel-root': {
+                  color: 'var(--accent-color)',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--accent-color)',
+                }
+              }} 
+              label={t("returnDate")} 
+              value={returnDate} 
+              disabled={value !== "return"} 
+              onChange={setReturnDate} 
+              minDate={dayjs()} 
+            />
           </Grid>
         </LocalizationProvider>
 

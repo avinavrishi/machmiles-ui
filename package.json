@@ -55,5 +55,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nullthrows": "^1.1.1",
+    "source-map-loader": "^5.0.0"
   }
 }

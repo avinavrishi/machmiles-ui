@@ -1,10 +1,11 @@
 import { Box, Grid, Typography } from "@mui/material";
 import Logo from '../assets/icons/logo.svg'
+import '../styles/responsive.css'
 const Footer = () => {
   return (
     <div className="footer">
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item lg={4} md={4} sm={6} xs={12}>
             <Grid container spacing={2} sx={{color:'white', padding:'2vw', justifyContent:'center', alignItems:'center', textAlign:'center'}}>
                 <Grid item xs={12} sx={{fontWeight:600, textTransform:'uppercase'}}>
                     Help
@@ -16,7 +17,7 @@ const Footer = () => {
                 }
             </Grid>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item lg={4} md={4} sm={6} xs={12}>
             <Grid container spacing={2} sx={{color:'white', padding:'2vw', justifyContent:'center', alignItems:'center', textAlign:'center'}}>
                 <Grid item xs={12} sx={{fontWeight:600, textTransform:'uppercase'}} mb={1}>
                     Hot Flight deals
@@ -28,7 +29,7 @@ const Footer = () => {
                 }
             </Grid>
         </Grid>
-        <Grid item xs={4}>
+            <Grid item lg={4} md={4} sm={6} xs={12}>
             <Grid container spacing={2} sx={{color:'white', padding:'2vw', justifyContent:'center', alignItems:'center', textAlign:'center'}}>
                 <Grid item xs={12} sx={{fontWeight:600, textTransform:'uppercase'}}>
                     Contact Information
@@ -49,10 +50,10 @@ const Footer = () => {
           </Box>
         </Grid>
         <Grid item xs={12} mt={'-2vw'} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-            <Typography sx={{marginTop:'-2vw',fontSize:'0.7vw',color:'GrayText'}}>Copyright 2024 © MachMiles. All Rights Reserved.</Typography>
+            <Typography className="footer-end">Copyright 2024 © MachMiles. All Rights Reserved.</Typography>
         </Grid>
         <Grid item xs={12} mt={1.5} sx={{display:'flex', alignItems:'center', padding:'1vw'}}>
-            <Typography sx={{marginTop:'-2vw',fontSize:'0.7vw',color:'GrayText', textAlign:'center'}}>* Fares are inclusive of all surcharges, our service fees & taxes. Tickets are non-refundable, non-transferable and non-assignable unless otherwise stated in the itinerary. Name changes are not permitted once a booking is confirmed. Displayed fares are subject to change and cannot be guaranteed until a booking confirmed and ticket is issued. Lowest fares may require an advance purchase of up to 21 days. Certain blackout dates may apply. Holidays and weekend travel may have a surcharge. Other restrictions may apply. Booking tickets over phone are subject to an additional $10 fee per passenger.</Typography>
+            <Typography className="footer-end">* Fares are inclusive of all surcharges, our service fees & taxes. Tickets are non-refundable, non-transferable and non-assignable unless otherwise stated in the itinerary. Name changes are not permitted once a booking is confirmed. Displayed fares are subject to change and cannot be guaranteed until a booking confirmed and ticket is issued. Lowest fares may require an advance purchase of up to 21 days. Certain blackout dates may apply. Holidays and weekend travel may have a surcharge. Other restrictions may apply. Booking tickets over phone are subject to an additional $10 fee per passenger.</Typography>
         </Grid>
       </Grid>
     </div>
