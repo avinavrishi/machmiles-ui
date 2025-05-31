@@ -1,10 +1,21 @@
 import { Box, Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import i18n from "../i18n";
+
 const Services = () => {
+  const {t} = useTranslation();
+  const selectedLanguage = useSelector((state)=>state.language.selectedLanguage)
+
+  useEffect(()=>{
+    i18n.changeLanguage(selectedLanguage)
+  },[selectedLanguage])
   return (
     <div className="services">
       <div className="service-title-section">
-        <p style={{fontSize:'1.5rem',fontWeight:500,lineHeight:'1rem', color:'grey', marginBottom:'-2vw'}}>why</p>
-        <p className="service-title"> Our Services</p>
+        <p style={{fontSize:'1.5rem',fontWeight:500,lineHeight:'1rem', color:'grey', marginBottom:'-2vw'}}>{t("why")}</p>
+        <p className="service-title">{t("ourServices")}</p>
       </div>
       <div
         style={{
@@ -32,8 +43,8 @@ const Services = () => {
           </Grid>
           <Grid item lg={3} md={3} sm={3} xs={12}>
             <Box>
-                <Typography style={{fontSize:'4vh', fontWeight:'bold', color:'black', textAlign:'center'}}>Live Support</Typography>
-                <Typography style={{fontSize:'2vh', color:'grey'}}>Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum Lorem Ipsum. Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum Lorem Ipsum </Typography>
+                <Typography style={{fontSize:'4vh', fontWeight:'bold', color:'black', textAlign:'center'}}>{t("liveSupport")}</Typography>
+                <Typography style={{fontSize:'2vh', color:'grey'}}>{t("ser1")}</Typography>
             </Box>
           </Grid>
           <Grid item lg={1} md={1} sm={1} xs={12} sx={{display:'flex', justifyContent:'center', alignItems:'center'}} >
@@ -53,8 +64,8 @@ const Services = () => {
           </Grid>
           <Grid item lg={3} md={3} sm={3} xs={12}>
             <Box>
-                <Typography style={{fontSize:'4vh', fontWeight:'bold', color:'black', textAlign:'center'}}>Free Cancellation.</Typography>
-                <Typography style={{fontSize:'2vh', color:'grey'}}>Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum Lorem Ipsum. Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum Lorem Ipsum </Typography>
+                <Typography style={{fontSize:'4vh', fontWeight:'bold', color:'black', textAlign:'center'}}>{t("freeCan")}</Typography>
+                <Typography style={{fontSize:'2vh', color:'grey'}}>{t("ser2")}</Typography>
             </Box>
           </Grid>
           <Grid item lg={1} md={1} sm={1} xs={12} sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -74,8 +85,8 @@ const Services = () => {
           </Grid>
           <Grid item lg={3} md={3} sm={3} xs={12}>
             <Box>
-                <Typography style={{fontSize:'4vh', fontWeight:'bold', color:'black', textAlign:'center'}}>Offers on 100+ Airlines</Typography>
-                <Typography style={{fontSize:'2vh', color:'grey'}}>Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum Lorem Ipsum. Lorem Ipsum Lorem IpsumLorem Ipsum Lorem Ipsum Lorem Ipsum </Typography>
+                <Typography style={{fontSize:'4vh', fontWeight:'bold', color:'black', textAlign:'center'}}>{t("Offer")}</Typography>
+                <Typography style={{fontSize:'2vh', color:'grey'}}>{t("ser3")}</Typography>
             </Box>
           </Grid>
         </Grid>
