@@ -1,0 +1,492 @@
+/* Base styles for mobile first approach */
+:root {
+  --mobile-padding: 1rem;
+  --tablet-padding: 2rem;
+  --desktop-padding: 1rem;
+  --navbar-height-mobile: 40px;
+  --navbar-height-desktop: 36px;
+  --transition-speed: 0.3s;
+}
+
+/* Main content spacing */
+main {
+  padding-top: var(--navbar-height-mobile);
+  min-height: calc(100vh - var(--navbar-height-mobile));
+}
+
+@media screen and (min-width: 769px) {
+  main {
+    padding-top: var(--navbar-height-desktop);
+    min-height: calc(100vh - var(--navbar-height-desktop));
+  }
+}
+
+/* Title and subtitle spacing */
+#title-style {
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+#subtitle {
+  margin-top: 0.5rem;
+}
+
+/* Search box spacing */
+.search-box {
+  margin-top: 2rem;
+}
+
+/* Enhanced UI Components */
+.MuiTextField-root {
+  width: 100%;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root {
+  border-radius: var(--radius-md);
+  transition: all var(--transition-speed) ease;
+  color: var(--text-color);
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.MuiTextField-root .MuiInputLabel-root {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.MuiTextField-root .MuiInputLabel-root.Mui-focused {
+  color: var(--accent-color);
+}
+
+.MuiTextField-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent-color);
+  opacity: 0.5;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent-color);
+  opacity: 0.8;
+}
+
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent-color);
+  opacity: 1;
+}
+
+.MuiTextField-root .MuiOutlinedInput-input {
+  color: var(--text-color);
+}
+
+.MuiTextField-root .MuiOutlinedInput-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* Menu and Drawer Enhancements */
+.MuiDrawer-paper {
+  background-color: var(--primary-color);
+  border-left: none;
+  box-shadow: var(--shadow-lg);
+  width: 85% !important;
+  max-width: 320px !important;
+}
+
+.MuiMenu-paper {
+  background-color: var(--primary-color);
+  border: 1px solid var(--accent-color);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.MuiMenu-list {
+  padding: 0.5rem;
+}
+
+.MuiMenuItem-root {
+  transition: all var(--transition-speed) ease;
+  border-radius: var(--radius-sm);
+  margin: 0.25rem 0.5rem;
+  color: var(--text-color);
+}
+
+.MuiMenuItem-root:hover {
+  background-color: var(--secondary-color);
+  opacity: 0.8;
+  color: var(--text-color);
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.MuiMenuItem-root.Mui-selected:hover {
+  background-color: var(--secondary-color);
+  opacity: 1;
+  color: var(--text-color);
+}
+
+.MuiMenuItem-root .MuiListItemText-root {
+  color: var(--text-color);
+}
+
+.MuiMenuItem-root .MuiListItemText-primary {
+  color: var(--text-color);
+}
+
+/* Navbar base styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-index-fixed);
+  background-color: var(--primary-color);
+  transition: all var(--transition-speed) ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: var(--navbar-height-mobile);
+}
+
+.navbar.hidden {
+  transform: translateY(-100%);
+}
+
+.navbar.scrolled {
+  background-color: var(--background-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 var(--mobile-padding);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start
+}
+
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: opacity var(--transition-speed) ease;
+}
+
+.logo:hover {
+  opacity: 0.9;
+}
+
+.header-right {
+  margin-left: 20px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-md);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: flex-end;
+  align-items: center;
+}
+
+
+.nav-link {
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all var(--transition-speed) ease;
+  font-size: var(--font-size-sm);
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--accent-color);
+  transition: width var(--transition-speed) ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link:hover {
+  color: var(--accent-color);
+}
+
+.language-icon {
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all var(--transition-speed) ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+}
+
+.language-icon:hover {
+  color: var(--accent-color);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile styles (default) */
+@media screen and (max-width: 480px) {
+  .navbar {
+    height: var(--navbar-height-mobile);
+  }
+
+  .header-container {
+    padding: 0 1rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .responsive-logo {
+    width: 80px;
+    height: auto;
+  }
+
+  .language-icon {
+    display: none;
+  }
+
+  .MuiIconButton-root {
+    color: var(--text-color);
+    padding: 0.25rem;
+    margin: 0;
+    transform: scale(0.9);
+  }
+
+  .MuiIconButton-root:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  main {
+    padding-top: calc(var(--navbar-height-mobile) + 2rem);
+  }
+
+  #title-style {
+    font-size: 2rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+  }
+
+  #subtitle {
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+
+  .search-box {
+    width: 90%;
+    margin-top: 2.5rem;
+  }
+
+  .submit-button {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+}
+
+/* Tablet styles */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .navbar {
+    height: var(--navbar-height-mobile);
+  }
+
+  .header-container {
+    padding: 0 1.5rem;
+  }
+
+  .nav-links {
+    gap: 0.75rem;
+  }
+
+  .responsive-logo {
+    width: 100px;
+  }
+
+  .language-icon {
+    font-size: 1.5rem;
+  }
+
+  #title-style {
+    font-size: 2.5rem;
+  }
+
+  #subtitle {
+    font-size: 1.2rem;
+  }
+
+  .search-box {
+    width: 85%;
+  }
+}
+
+/* Desktop styles */
+@media screen and (min-width: 769px) {
+  .navbar {
+    height: var(--navbar-height-desktop);
+  }
+
+  .header-container {
+    padding: 0 2rem;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
+  }
+
+  .responsive-logo {
+    width: 120px;
+  }
+
+  .language-icon {
+    font-size: 1.75rem;
+  }
+
+  #title-style {
+    font-size: 3.5rem;
+  }
+
+  #subtitle {
+    font-size: 1.3rem;
+  }
+
+  .search-box {
+    width: 80%;
+  }
+}
+
+/* Common responsive utilities */
+.hide-on-mobile {
+  @media screen and (max-width: 480px) {
+    display: none !important;
+  }
+}
+
+.show-on-mobile {
+  @media screen and (min-width: 769px) {
+    display: none !important;
+  }
+}
+
+/* Responsive grid system */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media screen and (min-width: 481px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Responsive spacing */
+.section-padding {
+  padding: var(--mobile-padding);
+}
+
+@media screen and (min-width: 481px) {
+  .section-padding {
+    padding: var(--tablet-padding);
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .section-padding {
+    padding: var(--desktop-padding);
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color var(--transition-speed) ease,
+              color var(--transition-speed) ease,
+              border-color var(--transition-speed) ease,
+              box-shadow var(--transition-speed) ease;
+}
+
+/* Improved touch targets for mobile */
+@media screen and (max-width: 480px) {
+  button, 
+  .nav-link,
+  .language-icon {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Better scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Improved focus states */
+:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Footer styles */
+.footer-end {
+  margin-top: -2vw;
+  color: GrayText;
+  text-align: center;
+  font-size: 0.6vw; /* Base size for desktop */
+}
+
+@media screen and (max-width: 960px) {
+  .footer-end {
+    font-size: 0.8vw; /* Slightly larger for tablet */
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .footer-end {
+    font-size: 1rem; /* Largest for mobile */
+  }
+} 
