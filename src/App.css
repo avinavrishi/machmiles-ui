@@ -98,28 +98,27 @@
   width: 100%;
 }
 
-/* Landing Page CSS */
+/* Landing Page CSS – overflow: visible so autocomplete dropdown is not clipped */
 .landing {
   height: auto;
-  /* Ensure the landing div covers the viewport height */
+  min-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  overflow: hidden;
-  /* Hide overflow to prevent scrolling */
+  overflow: visible;
   background-image: url('https://images.unsplash.com/photo-1618064541372-289bdb6f5b7b?q=80&w=1933&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
   object-fit: contain;
   background-size: cover;
   background-position: 60%;
   padding-bottom: clamp(2rem, 8vw, 8vw);
-
 }
 
 .title {
-  line-height: 100%;
+  line-height: 1.2;
   text-align: center;
   flex-direction: column;
+  margin-bottom: 0.5rem;
 }
 
 .search-main {
@@ -133,43 +132,54 @@
   margin-top: clamp(2rem, 4vh, 4vh);
   width: clamp(90%, 80vw, 80%);
   min-height: auto;
-  border: 1px solid white;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.9);
   color: black;
-  background-color: white;
-  border-radius: 30px;
-  padding: clamp(1rem, 2vw, 2vw);
-  font-family: "Poppins";
+  background-color: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  font-family: var(--font-family-primary);
   font-size: clamp(0.875rem, 1vw, 1rem);
+  box-shadow: var(--shadow-lg);
 }
 
 #title-style {
   font-size: clamp(2rem, 3.5vw, 3.5rem);
-  font-family: 'Times New Roman', Times, serif;
-  color: #ffff;
-  line-height: 70%;
+  font-family: var(--font-family-secondary);
+  color: #fff;
+  line-height: 1.15;
+  margin: 0 0 0.25rem 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 #subtitle {
   font-size: clamp(1rem, 1.3vw, 1.3rem);
-  font-family: 'Times New Roman', Times, serif;
-  color: #ffff;
+  font-family: var(--font-family-secondary);
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.submit-button{
-  border:none;
-  padding: clamp(0.75rem, 1rem, 1rem);
-  border-radius: 7px;
-  background-color: #0e367e;
+.submit-button {
+  border: none;
+  padding: clamp(0.75rem, 1rem, 1rem) clamp(1.5rem, 2vw, 2rem);
+  border-radius: 8px;
+  background-color: var(--secondary-color);
   color: white;
-  min-width: clamp(120px, 15vw, 15vw);
+  min-width: clamp(140px, 16vw, 200px);
   font-size: clamp(0.875rem, 0.95vw, 0.95rem);
-  font-weight: 500;
-  font-family: 'Poppins';
+  font-weight: 600;
+  font-family: var(--font-family-primary);
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast), transform 0.1s ease;
 }
-.submit-button:hover{
-  background-color: #3f8fd6ff;
-  transition: 0.2s ease-in;
+.submit-button:hover:not(:disabled) {
+  background-color: var(--accent-color);
+}
+.submit-button:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
 }
 
 /* Services Section*/

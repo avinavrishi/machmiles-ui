@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://34.134.214.156:8000";
+const BASE_URL = "http://127.0.0.1:8000";
 
 const axiosServices = {
     get: async (endpoint, params = {}, headers = {}, requiresAuth = false) => {

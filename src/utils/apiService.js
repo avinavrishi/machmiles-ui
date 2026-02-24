@@ -39,31 +39,63 @@ export const userLogin = async (payload) => {
   return apiService.post(API_ENDPOINTS.USER_LOGIN, payload);
 };
 
-// Fetch Airport Suggestions
+// Fetch Airport Suggestions – Agoda API returns { status, data: { suggestions: [...] } }
+// Each suggestion has: name (city), country, tripLocations[], airports[], nearByAirports[]
+// We need to emit options with a single code per row for flight search (use airport/trip code).
 export const getAirportSuggestions = async (query) => {
-  if (!query) return [];
+  if (!query || typeof query !== "string" || query.trim() === "") return [];
+  const q = query.trim();
   try {
     const response = await apiService.get(
       API_ENDPOINTS.AIRPORT_SUGGESTIONS,
-      { query: encodeURIComponent(query) },
+      { query: encodeURIComponent(q) },
       { Accept: "application/json" }
     );
-    
-    return response?.data?.flatMap((item) =>
-      item.airports.length > 0
-        ? item.airports.map((airport) => ({
-            name: `${airport.name} (${airport.code})`,
-            city: item.name,
-            country: item.country.name,
-            code: airport.code,
-          }))
-        : [{
-            name: item.name,
-            city: item.name,
-            country: item.country.name,
-            code: item.code || null,
-          }]
-    ) || [];
+    const suggestions = response?.data?.suggestions;
+    if (!Array.isArray(suggestions)) return [];
+
+    const items = [];
+    for (const s of suggestions) {
+      const cityName = s.name || "";
+      const countryName = s.country?.name || "";
+
+      if (s.airports?.length > 0) {
+        for (const airport of s.airports) {
+          if (airport?.code) {
+            items.push({
+              name: airport.name || `${cityName} (${airport.code})`,
+              city: cityName,
+              country: countryName,
+              code: airport.code,
+            });
+          }
+        }
+        continue;
+      }
+      if (s.nearByAirports?.length > 0) {
+        for (const airport of s.nearByAirports) {
+          if (airport?.code) {
+            items.push({
+              name: airport.name || `${airport.cityName || cityName} (${airport.code})`,
+              city: airport.cityName || cityName,
+              country: countryName,
+              code: airport.code,
+            });
+          }
+        }
+        continue;
+      }
+      const code = s.tripLocations?.[0]?.code;
+      if (code) {
+        items.push({
+          name: cityName,
+          city: cityName,
+          country: countryName,
+          code,
+        });
+      }
+    }
+    return items;
   } catch (error) {
     console.error("API Call Failed:", error);
     return [];

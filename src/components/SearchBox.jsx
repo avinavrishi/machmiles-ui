@@ -66,6 +66,8 @@ const SearchBox = ({prevData}) => {
   // State for API search results
   const [fromResults, setFromResults] = useState([]);
   const [toResults, setToResults] = useState([]);
+  const [fromSuggestionsLoading, setFromSuggestionsLoading] = useState(false);
+  const [toSuggestionsLoading, setToSuggestionsLoading] = useState(false);
 
   // State to control the visibility of the dropdowns
   const [showFromDropdown, setShowFromDropdown] = useState(false);
@@ -88,20 +90,33 @@ const SearchBox = ({prevData}) => {
   };
 
   // Function to fetch airport suggestions
-  const fetchAirportSuggestions = async (query, setResults) => {
+  const fetchAirportSuggestions = async (query, setResults, setLoading) => {
+    setLoading(true);
     const results = await getAirportSuggestions(query);
     setResults(results);
+    setLoading(false);
   };
 
-  // Debounced API call handlers
-  const debouncedFetchFromResults = debounce((query) => fetchAirportSuggestions(query, setFromResults), 1500);
-  const debouncedFetchToResults = debounce((query) => fetchAirportSuggestions(query, setToResults), 1500);
+  // Debounced API call handlers (400ms for snappy UX)
+  const debouncedFetchFromResults = debounce(
+    (query) => fetchAirportSuggestions(query, setFromResults, setFromSuggestionsLoading),
+    400
+  );
+  const debouncedFetchToResults = debounce(
+    (query) => fetchAirportSuggestions(query, setToResults, setToSuggestionsLoading),
+    400
+  );
 
   // Handle input change
   const handleFromChange = (e) => {
     const query = e.target.value;
-    // console.log("Query Typed:", query);
     setFrom(query);
+    if (!query.trim()) {
+      setFromCode("");
+      setFromResults([]);
+      setShowFromDropdown(false);
+      return;
+    }
     setShowFromDropdown(true);
     debouncedFetchFromResults(query);
   };
@@ -109,9 +124,19 @@ const SearchBox = ({prevData}) => {
   const handleToChange = (e) => {
     const query = e.target.value;
     setTo(query);
+    if (!query.trim()) {
+      setToCode("");
+      setToResults([]);
+      setShowToDropdown(false);
+      return;
+    }
     setShowToDropdown(true);
     debouncedFetchToResults(query);
   };
+
+  // Close dropdown on blur (delay so click on item fires first)
+  const closeFromDropdown = () => setTimeout(() => setShowFromDropdown(false), 150);
+  const closeToDropdown = () => setTimeout(() => setShowToDropdown(false), 150);
 
   // Handle selection from dropdown
   const handleFromSelect = (selectedAirport) => {
@@ -184,18 +209,27 @@ const SearchBox = ({prevData}) => {
         </Grid>
 
         {/* From & To Fields */}
-        <Grid item lg={5} md={5} sm={12} xs={12} position="relative">
+        <Grid item lg={5} md={5} sm={12} xs={12} position="relative" sx={{ overflow: "visible" }}>
           <TextField
             fullWidth
             label={t("origin")}
             value={from}
             onChange={handleFromChange}
+            onBlur={closeFromDropdown}
+            onFocus={() => from.trim() && fromResults.length > 0 && setShowFromDropdown(true)}
             InputProps={{
-              endAdornment: from && (
+              endAdornment: (from || fromSuggestionsLoading) && (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setFrom("")} size="small">
-                    <ClearIcon />
-                  </IconButton>
+                  {fromSuggestionsLoading ? (
+                    <CircularProgress size={20} sx={{ color: "var(--accent-color)" }} />
+                  ) : from ? (
+                    <IconButton
+                      onClick={() => { setFrom(""); setFromCode(""); setFromResults([]); setShowFromDropdown(false); }}
+                      size="small"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  ) : null}
                 </InputAdornment>
               ),
               style: {
@@ -225,28 +259,38 @@ const SearchBox = ({prevData}) => {
               }
             }}
           />
-          {showFromDropdown && fromResults.length > 0 && (
+          {showFromDropdown && (fromSuggestionsLoading || fromResults.length > 0) && (
             <List
+              component="div"
               sx={{
                 position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
                 width: "100%",
+                marginTop: 1,
                 background: "#fff",
-                zIndex: 1000,
-                boxShadow: "0px 4px 10px rgba(0,0,0,0.15)",
-                maxHeight: "200px", // Limit height
-                overflowY: "auto",  // Enable scrolling
+                zIndex: 1100,
+                boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
+                maxHeight: 240,
+                overflowY: "auto",
                 borderRadius: "8px",
-                transition: "opacity 0.3s ease-in-out",
+                border: "1px solid rgba(0,0,0,0.08)",
               }}
             >
-              {fromResults.map((airport, index) => (
+              {fromSuggestionsLoading && fromResults.length === 0 ? (
+                <ListItem sx={{ justifyContent: "center", py: 2 }}>
+                  <Typography variant="body2" color="textSecondary">{t("searching") || "Searching…"}</Typography>
+                </ListItem>
+              ) : (
+                fromResults.map((airport, index) => (
                 <ListItem
-                  key={index}
+                  key={airport.code ? `${airport.code}-${index}` : index}
                   button
                   onClick={() => handleFromSelect(airport)}
                   sx={{
-                    "&:hover": { background: "#f5f5f5" },
-                    padding: "10px",
+                    "&:hover": { background: "#f0f4f8" },
+                    padding: "10px 12px",
                     cursor: "pointer",
                     display: "flex",
                     flexDirection: "column",
@@ -254,7 +298,6 @@ const SearchBox = ({prevData}) => {
                   }}
                 >
                   <Grid container spacing={1} alignItems="center">
-                    {/* Airport Name (80%) + Code (20%) */}
                     <Grid item xs={8}>
                       <Typography variant="body1" fontWeight="bold">
                         {airport.name}
@@ -265,8 +308,6 @@ const SearchBox = ({prevData}) => {
                         {airport.code || ""}
                       </Typography>
                     </Grid>
-
-                    {/* City, Country Below */}
                     <Grid item xs={12}>
                       <Typography variant="body2" color="textSecondary">
                         {airport.city}, {airport.country}
@@ -274,8 +315,8 @@ const SearchBox = ({prevData}) => {
                     </Grid>
                   </Grid>
                 </ListItem>
-              ))}
-
+              ))
+              )}
             </List>
           )}
 
@@ -291,18 +332,27 @@ const SearchBox = ({prevData}) => {
           }}  />
         </Grid>
 
-        <Grid item lg={5} md={5} sm={12} xs={12} position="relative">
+        <Grid item lg={5} md={5} sm={12} xs={12} position="relative" sx={{ overflow: "visible" }}>
           <TextField
             fullWidth
             label={t("destination")}
             value={to}
             onChange={handleToChange}
+            onBlur={closeToDropdown}
+            onFocus={() => to.trim() && toResults.length > 0 && setShowToDropdown(true)}
             InputProps={{
-              endAdornment: to && (
+              endAdornment: (to || toSuggestionsLoading) && (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setTo("")} size="small">
-                    <ClearIcon />
-                  </IconButton>
+                  {toSuggestionsLoading ? (
+                    <CircularProgress size={20} sx={{ color: "var(--accent-color)" }} />
+                  ) : to ? (
+                    <IconButton
+                      onClick={() => { setTo(""); setToCode(""); setToResults([]); setShowToDropdown(false); }}
+                      size="small"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  ) : null}
                 </InputAdornment>
               ),
               style: {
@@ -332,28 +382,38 @@ const SearchBox = ({prevData}) => {
               }
             }}
           />
-          {showToDropdown && toResults.length > 0 && (
+          {showToDropdown && (toSuggestionsLoading || toResults.length > 0) && (
             <List
+              component="div"
               sx={{
                 position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
                 width: "100%",
+                marginTop: 1,
                 background: "#fff",
-                zIndex: 1000,
-                boxShadow: "0px 4px 10px rgba(0,0,0,0.15)",
-                maxHeight: "200px",
+                zIndex: 1100,
+                boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
+                maxHeight: 240,
                 overflowY: "auto",
                 borderRadius: "8px",
-                transition: "opacity 0.3s ease-in-out",
+                border: "1px solid rgba(0,0,0,0.08)",
               }}
             >
-              {toResults.map((airport, index) => (
+              {toSuggestionsLoading && toResults.length === 0 ? (
+                <ListItem sx={{ justifyContent: "center", py: 2 }}>
+                  <Typography variant="body2" color="textSecondary">{t("searching") || "Searching…"}</Typography>
+                </ListItem>
+              ) : (
+                toResults.map((airport, index) => (
                 <ListItem
-                  key={index}
+                  key={airport.code ? `${airport.code}-${index}` : index}
                   button
                   onClick={() => handleToSelect(airport)}
                   sx={{
-                    "&:hover": { background: "#f5f5f5" },
-                    padding: "10px",
+                    "&:hover": { background: "#f0f4f8" },
+                    padding: "10px 12px",
                     cursor: "pointer",
                     display: "flex",
                     flexDirection: "column",
@@ -361,7 +421,6 @@ const SearchBox = ({prevData}) => {
                   }}
                 >
                   <Grid container spacing={1} alignItems="center">
-                    {/* Airport Name (80%) + Code (20%) */}
                     <Grid item xs={8}>
                       <Typography variant="body1" fontWeight="bold">
                         {airport.name}
@@ -372,8 +431,6 @@ const SearchBox = ({prevData}) => {
                         {airport.code || ""}
                       </Typography>
                     </Grid>
-
-                    {/* City, Country Below */}
                     <Grid item xs={12}>
                       <Typography variant="body2" color="textSecondary">
                         {airport.city}, {airport.country}
@@ -381,7 +438,8 @@ const SearchBox = ({prevData}) => {
                     </Grid>
                   </Grid>
                 </ListItem>
-              ))}
+              ))
+              )}
             </List>
           )}
         </Grid>

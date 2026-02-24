@@ -22,7 +22,7 @@
     "premiumEco":"Premium Economy",
     "business":"Business Class",
     "first":"First Class",
-    "searchFlight":"Search Flights",
+    "searchFlight":"Search Flights","searching":"Searching…",
 
     "why":"why",
     "ourServices":"Our Services",
